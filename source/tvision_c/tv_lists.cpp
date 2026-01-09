@@ -11,6 +11,7 @@
 #define Uses_TListBox
 #define Uses_TScrollBar
 #define Uses_TCollection
+#define Uses_TLineCollection
 #define Uses_TStringCollection
 #define Uses_TRect
 #include <tvision/tv.h>
@@ -166,46 +167,6 @@ tv_ListViewer* tv_scroller_to_listviewer(tv_Scroller* scroller) {
     return reinterpret_cast<tv_ListViewer*>(scroller);
 }
 
-/* TCollection functions */
-
-tv_Collection* tv_collection_create(int limit, int delta) {
-    return reinterpret_cast<tv_Collection*>(new TCollection(limit, delta));
-}
-
-void tv_collection_destroy(tv_Collection* collection) {
-    if (collection) {
-        delete reinterpret_cast<TCollection*>(collection);
-    }
-}
-
-void tv_collection_insert(tv_Collection* collection, void* item) {
-    reinterpret_cast<TCollection*>(collection)->insert(item);
-}
-
-void tv_collection_at_insert(tv_Collection* collection, int index, void* item) {
-    reinterpret_cast<TCollection*>(collection)->atInsert(index, item);
-}
-
-void* tv_collection_at(tv_Collection* collection, int index) {
-    return reinterpret_cast<TCollection*>(collection)->at(index);
-}
-
-void tv_collection_at_free(tv_Collection* collection, int index) {
-    reinterpret_cast<TCollection*>(collection)->atFree(index);
-}
-
-void tv_collection_at_remove(tv_Collection* collection, int index) {
-    reinterpret_cast<TCollection*>(collection)->atRemove(index);
-}
-
-void tv_collection_free_all(tv_Collection* collection) {
-    reinterpret_cast<TCollection*>(collection)->freeAll();
-}
-
-int tv_collection_get_count(tv_Collection* collection) {
-    return reinterpret_cast<TCollection*>(collection)->getCount();
-}
-
 /* String collection helpers */
 
 tv_Collection* tv_string_collection_create(void) {
@@ -238,6 +199,7 @@ void tv_listbox_destroy(tv_ListBox* listbox) {
     }
 }
 
+/*
 void tv_listbox_set_list(tv_ListBox* listbox, tv_Collection* list) {
     reinterpret_cast<TListBox*>(listbox)->list = reinterpret_cast<TCollection*>(list);
 }
@@ -245,6 +207,7 @@ void tv_listbox_set_list(tv_ListBox* listbox, tv_Collection* list) {
 tv_Collection* tv_listbox_get_list(tv_ListBox* listbox) {
     return reinterpret_cast<tv_Collection*>(reinterpret_cast<TListBox*>(listbox)->list);
 }
+*/
 
 void tv_listbox_new_list(tv_ListBox* listbox, tv_Collection* list) {
     reinterpret_cast<TListBox*>(listbox)->newList(reinterpret_cast<TCollection*>(list));

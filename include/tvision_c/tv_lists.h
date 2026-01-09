@@ -23,6 +23,7 @@ typedef struct tv_ListViewer tv_ListViewer;
 typedef struct tv_ListBox tv_ListBox;
 typedef struct tv_ScrollBar tv_ScrollBar;
 typedef struct tv_Collection tv_Collection;
+typedef struct tv_LineCollection tv_LineCollection;
 
 /* Scroll bar part codes */
 #define TV_SB_LEFT_ARROW    0
@@ -82,17 +83,6 @@ tv_Scroller* tv_listviewer_to_scroller(tv_ListViewer* viewer);
 tv_ListViewer* tv_view_to_listviewer(tv_View* view);
 tv_ListViewer* tv_scroller_to_listviewer(tv_Scroller* scroller);
 
-/* TCollection functions (for use with TListBox) */
-tv_Collection* tv_collection_create(int limit, int delta);
-void tv_collection_destroy(tv_Collection* collection);
-void tv_collection_insert(tv_Collection* collection, void* item);
-void tv_collection_at_insert(tv_Collection* collection, int index, void* item);
-void* tv_collection_at(tv_Collection* collection, int index);
-void tv_collection_at_free(tv_Collection* collection, int index);
-void tv_collection_at_remove(tv_Collection* collection, int index);
-void tv_collection_free_all(tv_Collection* collection);
-int tv_collection_get_count(tv_Collection* collection);
-
 /* String collection helpers */
 tv_Collection* tv_string_collection_create(void);
 void tv_string_collection_insert(tv_Collection* collection, const char* str);
@@ -101,8 +91,8 @@ const char* tv_string_collection_at(tv_Collection* collection, int index);
 /* TListBox functions */
 tv_ListBox* tv_listbox_create(tv_Rect bounds, tv_ushort num_cols, tv_ScrollBar* scrollbar);
 void tv_listbox_destroy(tv_ListBox* listbox);
-void tv_listbox_set_list(tv_ListBox* listbox, tv_Collection* list);
-tv_Collection* tv_listbox_get_list(tv_ListBox* listbox);
+// void tv_listbox_set_list(tv_ListBox* listbox, tv_Collection* list);
+// tv_Collection* tv_listbox_get_list(tv_ListBox* listbox);
 void tv_listbox_new_list(tv_ListBox* listbox, tv_Collection* list);
 int tv_listbox_get_selection(tv_ListBox* listbox);
 void tv_listbox_set_selection(tv_ListBox* listbox, int index);

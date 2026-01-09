@@ -15,6 +15,25 @@
 #include "tv_window.h"
 
 #ifdef __cplusplus
+#include <tvision/tv.h>
+
+class TCApplication : public TApplication
+{
+public:
+    // Constructor with custom callbacks for status line, menu bar, and event handling
+    TCApplication(TStatusLine *(*statusLineFunc)(TRect),
+                  TMenuBar *(*menuBarFunc)(TRect),
+                  void (*handleEventFunc)(TEvent));
+
+    virtual void handleEvent(TEvent& event);
+
+private:
+    // TStatusLine *(*cStatusLine)(TRect);
+    // TMenuBar *(*cMenuBar)(TRect);
+    void (*cHandleEvent)(TEvent);
+
+};
+
 extern "C" {
 #endif
 
@@ -52,8 +71,15 @@ void tv_program_set_screen_mode(tv_Program* program, tv_ushort mode);
 tv_View* tv_program_to_view(tv_Program* program);
 tv_Group* tv_program_to_group(tv_Program* program);
 
-/* TApplication functions */
-tv_Application* tv_application_create(void);
+/* TApplication functions
+ *
+ * Note: tv_application_create() uses TCApplication internally, a minimal
+ * subclass that exposes TApplication's protected constructor. This is
+ * transparent to C wrapper users and maintains full TApplication compatibility.
+ */
+tv_Application* tv_application_create(tv_StatusLine *(*cStatusLine)(tv_Rect),
+                                      tv_MenuBar *(*cMenuBar)(tv_Rect),
+                                      void (*handleEventFunc)(tv_Event));
 void tv_application_destroy(tv_Application* app);
 void tv_application_run(tv_Application* app);
 void tv_application_quit(tv_Application* app);
@@ -70,8 +96,8 @@ tv_Group* tv_application_to_group(tv_Application* app);
 /* TDeskTop functions */
 tv_DeskTop* tv_desktop_create(tv_Rect bounds);
 void tv_desktop_destroy(tv_DeskTop* desktop);
-void tv_desktop_tile(tv_DeskTop* desktop);
-void tv_desktop_cascade(tv_DeskTop* desktop);
+// void tv_desktop_tile(tv_DeskTop* desktop);
+// void tv_desktop_cascade(tv_DeskTop* desktop);
 
 /* Cast functions */
 tv_View* tv_desktop_to_view(tv_DeskTop* desktop);
@@ -80,8 +106,8 @@ tv_Group* tv_desktop_to_group(tv_DeskTop* desktop);
 /* Menu item helper functions */
 tv_MenuItem* tv_menuitem_create(const char* name, tv_ushort command, tv_ushort key_code, 
                                  const char* help_ctx, tv_MenuItem* next);
-tv_MenuItem* tv_menuitem_create_submenu(const char* name, tv_MenuItem* submenu, tv_MenuItem* next);
-tv_MenuItem* tv_menuitem_create_separator(tv_MenuItem* next);
+// tv_MenuItem* tv_menuitem_create_submenu(const char* name, tv_MenuItem* submenu, tv_MenuItem* next);
+// tv_MenuItem* tv_menuitem_create_separator(tv_MenuItem* next);
 void tv_menuitem_destroy(tv_MenuItem* item);
 
 /* TMenuBar functions */

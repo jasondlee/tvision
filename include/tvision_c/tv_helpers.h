@@ -14,6 +14,7 @@
 #include "tv_view.h"
 #include "tv_window.h"
 #include "tv_widgets.h"
+#include "tv_lists.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,6 +29,8 @@ extern "C" {
 #define TV_MF_NO_BUTTON     0x0200
 #define TV_MF_OK_BUTTON     0x0400
 #define TV_MF_CANCEL_BUTTON 0x0800
+
+tv_ushort execDialog( tv_Dialog *d, void *data );
 
 tv_ushort tv_message_box(const char* msg, tv_ushort flags);
 tv_ushort tv_message_box_rect(tv_Rect rect, const char* msg, tv_ushort flags);
@@ -126,12 +129,10 @@ const char* tv_string_list_get(tv_Collection* list, int index);
 int tv_string_list_count(tv_Collection* list);
 
 /* File dialog helpers */
-tv_bool tv_open_file_dialog(const char* wildcard, const char* title, char* filename, int filename_size);
-tv_bool tv_save_file_dialog(const char* wildcard, const char* title, char* filename, int filename_size);
+// tv_bool tv_open_file_dialog(const char* wildcard, const char* title, char* filename, int filename_size);
+// tv_bool tv_save_file_dialog(const char* wildcard, const char* title, char* filename, int filename_size);
 
 /* Desktop operations */
-void tv_tile_desktop(void);
-void tv_cascade_desktop(void);
 void tv_close_all_windows(void);
 
 #ifdef __cplusplus

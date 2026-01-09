@@ -12,6 +12,7 @@
 
 #include "tv_types.h"
 #include "tv_view.h"
+#include "tv_lists.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,16 +67,11 @@ void tv_editor_get_selection(tv_Editor* editor, int* start, int* end);
 void tv_editor_clipboard_cut(tv_Editor* editor);
 void tv_editor_clipboard_copy(tv_Editor* editor);
 void tv_editor_clipboard_paste(tv_Editor* editor);
-void tv_editor_clipboard_clear(tv_Editor* editor);
+// void tv_editor_clipboard_clear(tv_Editor* editor);
 
 /* Search and replace */
 tv_bool tv_editor_search(tv_Editor* editor, const char* find_str, tv_ushort options);
 void tv_editor_replace(tv_Editor* editor, const char* find_str, const char* replace_str, tv_ushort options);
-
-/* File operations */
-tv_bool tv_editor_save(tv_Editor* editor);
-tv_bool tv_editor_save_as(tv_Editor* editor, const char* filename);
-tv_bool tv_editor_load(tv_Editor* editor, const char* filename);
 
 /* Editor state */
 tv_bool tv_editor_is_modified(tv_Editor* editor);
@@ -105,10 +101,10 @@ tv_FileEditor* tv_fileeditor_create(tv_Rect bounds, tv_ScrollBar* h_scrollbar,
                                      const char* filename);
 void tv_fileeditor_destroy(tv_FileEditor* editor);
 const char* tv_fileeditor_get_filename(tv_FileEditor* editor);
-void tv_fileeditor_set_filename(tv_FileEditor* editor, const char* filename);
+// void tv_fileeditor_set_filename(tv_FileEditor* editor, const char* filename);
 tv_bool tv_fileeditor_save(tv_FileEditor* editor);
 tv_bool tv_fileeditor_save_as(tv_FileEditor* editor);
-tv_bool tv_fileeditor_load_file(tv_FileEditor* editor);
+// tv_bool tv_fileeditor_load_file(tv_FileEditor* editor);
 
 /* Cast functions */
 tv_View* tv_fileeditor_to_view(tv_FileEditor* editor);

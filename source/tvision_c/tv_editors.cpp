@@ -109,9 +109,11 @@ void tv_editor_clipboard_paste(tv_Editor* editor) {
     reinterpret_cast<TEditor*>(editor)->clipPaste();
 }
 
+/*
 void tv_editor_clipboard_clear(tv_Editor* editor) {
     reinterpret_cast<TEditor*>(editor)->clipClear();
 }
+*/
 
 /* Search and replace */
 
@@ -124,25 +126,6 @@ void tv_editor_replace(tv_Editor* editor, const char* find_str, const char* repl
     if (find_str && replace_str) {
         reinterpret_cast<TEditor*>(editor)->doSearchReplace();
     }
-}
-
-/* File operations */
-
-tv_bool tv_editor_save(tv_Editor* editor) {
-    return reinterpret_cast<TEditor*>(editor)->save() ? TV_TRUE : TV_FALSE;
-}
-
-tv_bool tv_editor_save_as(tv_Editor* editor, const char* filename) {
-    if (!filename) return TV_FALSE;
-    TEditor* ed = reinterpret_cast<TEditor*>(editor);
-    return ed->saveAs() ? TV_TRUE : TV_FALSE;
-}
-
-tv_bool tv_editor_load(tv_Editor* editor, const char* filename) {
-    if (!filename) return TV_FALSE;
-    TEditor* ed = reinterpret_cast<TEditor*>(editor);
-    ed->setBufLen(0);
-    return ed->insertFrom(filename) ? TV_TRUE : TV_FALSE;
 }
 
 /* Editor state */
@@ -243,6 +226,7 @@ const char* tv_fileeditor_get_filename(tv_FileEditor* editor) {
     return reinterpret_cast<TFileEditor*>(editor)->fileName;
 }
 
+/*
 void tv_fileeditor_set_filename(tv_FileEditor* editor, const char* filename) {
     TFileEditor* ed = reinterpret_cast<TFileEditor*>(editor);
     if (ed->fileName) {
@@ -257,6 +241,7 @@ void tv_fileeditor_set_filename(tv_FileEditor* editor, const char* filename) {
         ed->fileName = nullptr;
     }
 }
+*/
 
 tv_bool tv_fileeditor_save(tv_FileEditor* editor) {
     return reinterpret_cast<TFileEditor*>(editor)->save() ? TV_TRUE : TV_FALSE;
@@ -266,14 +251,14 @@ tv_bool tv_fileeditor_save_as(tv_FileEditor* editor) {
     return reinterpret_cast<TFileEditor*>(editor)->saveAs() ? TV_TRUE : TV_FALSE;
 }
 
-tv_bool tv_fileeditor_load_file(tv_FileEditor* editor) {
+/*tv_bool tv_fileeditor_load_file(tv_FileEditor* editor) {
     TFileEditor* ed = reinterpret_cast<TFileEditor*>(editor);
     if (ed->fileName) {
         ed->setBufLen(0);
         return ed->insertFrom(ed->fileName) ? TV_TRUE : TV_FALSE;
     }
     return TV_FALSE;
-}
+}*/
 
 /* Cast functions */
 

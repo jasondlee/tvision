@@ -54,20 +54,20 @@ tv_InputLine* tv_view_to_inputline(tv_View* view);
 /* TStaticText functions */
 tv_StaticText* tv_statictext_create(tv_Rect bounds, const char* text);
 void tv_statictext_destroy(tv_StaticText* text);
-void tv_statictext_set_text(tv_StaticText* text, const char* new_text);
-const char* tv_statictext_get_text(tv_StaticText* text);
+// void tv_statictext_set_text(tv_StaticText* text, const char* new_text);
+// const char* tv_statictext_get_text(tv_StaticText* text);
 tv_View* tv_statictext_to_view(tv_StaticText* text);
 tv_StaticText* tv_view_to_statictext(tv_View* view);
 
 /* TLabel functions */
-tv_Label* tv_label_create(tv_Rect bounds, const char* text, tv_View* link);
-void tv_label_destroy(tv_Label* label);
-void tv_label_set_text(tv_Label* label, const char* text);
-const char* tv_label_get_text(tv_Label* label);
-void tv_label_set_link(tv_Label* label, tv_View* link);
-tv_View* tv_label_get_link(tv_Label* label);
-tv_View* tv_label_to_view(tv_Label* label);
-tv_Label* tv_view_to_label(tv_View* view);
+// tv_Label* tv_label_create(tv_Rect bounds, const char* text, tv_View* link);
+// void tv_label_destroy(tv_Label* label);
+// void tv_label_set_text(tv_Label* label, const char* text);
+// const char* tv_label_get_text(tv_Label* label);
+// void tv_label_set_link(tv_Label* label, tv_View* link);
+// tv_View* tv_label_get_link(tv_Label* label);
+// tv_View* tv_label_to_view(tv_Label* label);
+// tv_Label* tv_view_to_label(tv_View* view);
 
 /* Cluster item structure */
 typedef struct tv_SItem {

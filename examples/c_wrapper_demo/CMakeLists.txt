@@ -7,7 +7,7 @@ set_property(TARGET hello_c PROPERTY C_STANDARD 99)
 tv_set_output_dir(hello_c)
 
 # Advanced demo with lists, editors, and helpers
-add_executable(advanced_demo advanced_demo.c)
-target_link_libraries(advanced_demo tvision_c)
-set_property(TARGET advanced_demo PROPERTY C_STANDARD 99)
-tv_set_output_dir(advanced_demo)
+#add_executable(advanced_demo advanced_demo.c)
+#target_link_libraries(advanced_demo tvision_c)
+#set_property(TARGET advanced_demo PROPERTY C_STANDARD 99)
+#tv_set_output_dir(advanced_demo)

@@ -125,6 +125,7 @@ void tv_statictext_destroy(tv_StaticText* text) {
     }
 }
 
+/*
 void tv_statictext_set_text(tv_StaticText* text, const char* new_text) {
     TStaticText* st = reinterpret_cast<TStaticText*>(text);
     if (st->text) {
@@ -141,8 +142,9 @@ void tv_statictext_set_text(tv_StaticText* text, const char* new_text) {
 }
 
 const char* tv_statictext_get_text(tv_StaticText* text) {
-    return reinterpret_cast<TStaticText*>(text)->text;
+    return reinterpret_cast<TStaticText*>(text)->getText();
 }
+*/
 
 tv_View* tv_statictext_to_view(tv_StaticText* text) {
     return reinterpret_cast<tv_View*>(text);
@@ -152,7 +154,7 @@ tv_StaticText* tv_view_to_statictext(tv_View* view) {
     return reinterpret_cast<tv_StaticText*>(view);
 }
 
-/* TLabel functions */
+/* TLabel functions * /
 
 tv_Label* tv_label_create(tv_Rect bounds, const char* text, tv_View* link) {
     TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
@@ -199,6 +201,7 @@ tv_View* tv_label_to_view(tv_Label* label) {
 tv_Label* tv_view_to_label(tv_View* view) {
     return reinterpret_cast<tv_Label*>(view);
 }
+*/
 
 /* Helper functions for TSItem */
 

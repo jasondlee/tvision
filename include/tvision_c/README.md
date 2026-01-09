@@ -171,7 +171,43 @@ void tv_label_destroy(tv_Label* label);
 
 #### TApplication
 
+The application framework is the core of any Turbo Vision program. The C wrapper uses `TCApplication`, a minimal subclass of `TApplication`, to work around the protected constructor in the original Turbo Vision library.
+
+**Implementation Note**: `TApplication` has a protected constructor, which prevents direct instantiation from C wrapper code. To solve this, the wrapper internally uses `TCApplication`, a subclass that exposes public constructors:
+
+```cpp
+class TCApplication : public TApplication {
+private:
+    TStatusLine *(*cStatusLine)(TRect);
+    TMenuBar *(*cMenuBar)(TRect);
+    void (*cHandleEvent)(TEvent);
+
+public:
+    // Default constructor for simple applications
+    TCApplication();
+    
+    // Constructor with custom callbacks
+    TCApplication(TStatusLine *(*statusLineFunc)(TRect),
+                  TMenuBar *(*menuBarFunc)(TRect),
+                  void (*handleEventFunc)(TEvent));
+    
+    virtual ~TCApplication();
+    virtual void handleEvent(TEvent& event) override;
+};
+```
+
+**Features**:
+- **Default constructor**: For simple applications that don't need custom callbacks
+- **Callback constructor**: Accepts function pointers for creating custom status lines, menu bars, and handling events
+- **Instance variables**: Stores callback references for use during application lifecycle
+- **Event handling**: Overrides `handleEvent()` to call custom callback if provided
+
+This implementation detail is transparent to C wrapper users. The `tv_Application*` pointer returned by `tv_application_create()` behaves exactly like a standard `TApplication` instance with full compatibility.
+
+**C API**:
+
 ```c
+/* Creates a new application instance (uses TCApplication internally) */
 tv_Application* tv_application_create(void);
 void tv_application_destroy(tv_Application* app);
 void tv_application_run(tv_Application* app);

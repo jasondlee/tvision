@@ -126,6 +126,11 @@ tv_StatusLine* create_status_line(void) {
 
 /* Custom application with event handling */
 void run_application(void) {
+    /* Create application using TCApplication internally.
+     * TCApplication is a minimal subclass that exposes TApplication's
+     * protected constructor, allowing the C wrapper to instantiate it.
+     * This is transparent and provides full TApplication functionality.
+     */
     tv_Application* app = tv_application_create();
     tv_Program* program = tv_application_to_program(app);
     

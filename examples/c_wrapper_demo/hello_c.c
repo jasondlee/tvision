@@ -45,10 +45,26 @@ tv_Dialog* create_hello_dialog(void) {
     return dialog;
 }
 
+tv_StatusLine* createStatusLine(tv_Rect r) {
+    return NULL;
+}
+
+tv_MenuBar* createMenuBar(tv_Rect r) {
+    return NULL;
+}
+
+void handleEvent(tv_Event e) {
+
+}
+
 /* Simple application with menu */
 int main(void) {
-    /* Create the application */
-    tv_Application* app = tv_application_create();
+    /* Create the application
+     * Note: tv_application_create() uses TCApplication internally to work
+     * around TApplication's protected constructor. This is transparent to
+     * C wrapper users and provides full TApplication functionality.
+     */
+    tv_Application* app = tv_application_create(createStatusLine, createMenuBar, handleEvent);
     
     if (!app) {
         fprintf(stderr, "Failed to create application\n");

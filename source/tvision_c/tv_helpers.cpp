@@ -29,6 +29,24 @@ extern "C" {
 
 /* Message box functions */
 
+tv_ushort execDialog( tv_Dialog *d, void *data ) {
+    TView *p =  reinterpret_cast<TProgram*> (TProgram::application)->validView( reinterpret_cast<TView*>(d) );
+    if( p == 0 ) {
+        return cmCancel;
+    } else{
+        if( data != 0 ) {
+            p->setData( data );
+        }
+        ushort result = TProgram::deskTop->execView( p );
+        if( result != cmCancel && data != 0 ) {
+            p->getData( data );
+        }
+        TObject::destroy( p );
+        return result;
+    }
+}
+
+
 tv_ushort tv_message_box(const char* msg, tv_ushort flags) {
     return messageBox(msg, flags);
 }
@@ -230,6 +248,7 @@ int tv_string_list_count(tv_Collection* list) {
 
 /* File dialog helpers */
 
+/*
 tv_bool tv_open_file_dialog(const char* wildcard, const char* title, char* filename, int filename_size) {
     if (!filename || filename_size <= 0) return TV_FALSE;
     
@@ -254,7 +273,7 @@ tv_bool tv_save_file_dialog(const char* wildcard, const char* title, char* filen
     std::strncpy(temp, filename, 255);
     temp[255] = '\0';
     
-    ushort result = execDialog(new TFileDialog(wildcard, title, "~N~ame", fdSaveButton, 101), temp);
+    ushort result = execDialog(new TFileDialog(wildcard, title, "~N~ame", 0, 101), temp);
     
     if (result == cmFileOpen) {
         std::strncpy(filename, temp, filename_size - 1);
@@ -263,20 +282,7 @@ tv_bool tv_save_file_dialog(const char* wildcard, const char* title, char* filen
     }
     return TV_FALSE;
 }
-
-/* Desktop operations */
-
-void tv_tile_desktop(void) {
-    if (TProgram::deskTop) {
-        TProgram::deskTop->tile();
-    }
-}
-
-void tv_cascade_desktop(void) {
-    if (TProgram::deskTop) {
-        TProgram::deskTop->cascade();
-    }
-}
+*/
 
 void tv_close_all_windows(void) {
     if (TProgram::deskTop) {
