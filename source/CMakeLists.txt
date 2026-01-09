@@ -192,4 +192,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.16.0" AND TV_OPTIMIZE_BUILD)
         set_property(SOURCE ${TVSOURCE_NOUNITY} PROPERTY SKIP_UNITY_BUILD_INCLUSION ON)
         set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
     endif()
+
+# C Wrapper Library
+add_subdirectory(tvision_c)
 endif()

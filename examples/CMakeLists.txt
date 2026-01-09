@@ -47,6 +47,9 @@ if (TV_BUILD_EXAMPLES)
         add_subdirectory(${app})
     endforeach()
 
+    # C wrapper demo
+    add_subdirectory(c_wrapper_demo)
+
 endif()
 
 add_subdirectory(avscolor)
