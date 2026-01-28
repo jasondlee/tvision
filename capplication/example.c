@@ -1,287 +1,183 @@
 /*----------------------------------------------------------*/
 /*                                                          */
-/*   example.c - Example usage of capplication C API       */
+/*   example.c - Example usage of capplication C wrappers  */
 /*                                                          */
 /*   Demonstrates building a TApplication from C code      */
 /*                                                          */
 /*----------------------------------------------------------*/
 
 #include "capplication.h"
-#include "cmenuitem.h"
-#include "cstatusline.h"
+#include "../cmenuitem/cmenuitem.h"
+#include "../cstatusline/cstatusline.h"
 #include <stdio.h>
-#include <string.h>
 
 /*
- * This example demonstrates how to build a complete Turbo Vision
- * application similar to TEditorApp from tvedit1.cpp, but using
- * pure C code with the capplication builder API.
+ * This example recreates the TEditorApp from tvedit.cpp
+ * using pure C code with the capplication, cmenuitem, and cstatusline wrappers.
  */
 
-/* Command constants */
-#define cmOpen        100
-#define cmNew         101
-#define cmSave        102
-#define cmSaveAs      103
-#define cmChangeDrct  104
-#define cmDosShell    105
-#define cmUndo        200
-#define cmCut         201
-#define cmCopy        202
-#define cmPaste       203
-#define cmClear       204
-#define cmFind        300
-#define cmReplace     301
-#define cmSearchAgain 302
-
-/* Global application pointer for handlers */
-static TApplication_C* g_app = NULL;
-
-/*
- * Event handlers
- */
-
-void handle_file_open(void* app, unsigned short command, void* userData)
-{
-    char fileName[256];
-    unsigned short result;
-    
-    printf("File Open handler called\n");
-    
-    result = c_application_exec_file_dialog(
-        (TApplication_C*)app,
-        "*.*",
-        "Open file",
-        fileName,
-        sizeof(fileName)
-    );
-    
-    if (result != C_cmQuit && result != 0) {
-        printf("Selected file: %s\n", fileName);
-        /* In a real app, you would open the file here */
-    }
-}
-
-void handle_file_new(void* app, unsigned short command, void* userData)
-{
-    printf("File New handler called\n");
-    /* In a real app, you would create a new editor window here */
-}
-
-void handle_change_dir(void* app, unsigned short command, void* userData)
-{
-    printf("Change Directory handler called\n");
-    c_application_exec_chdir_dialog((TApplication_C*)app);
-}
-
-void handle_dos_shell(void* app, unsigned short command, void* userData)
-{
-    printf("DOS Shell handler called\n");
-    /* In a real app, you would suspend and run a shell */
-}
-
-/*
- * Build the menu bar
- */
+/* Build the menu bar (similar to TEditorApp::initMenuBar) */
 TSubMenu_C* build_menubar(void)
 {
-    TSubMenu_C* fileMenu;
-    TSubMenu_C* editMenu;
-    TSubMenu_C* searchMenu;
-    TSubMenu_C* windowsMenu;
-    TMenuItem_C* item;
-    
     /* File menu */
-    fileMenu = c_submenu_new("~F~ile", C_kbAltF, C_hcNoContext);
+    TMenuItem_C* file_open = c_menuitem_new("~O~pen", C_cmOpen, C_kbF3, C_hcNoContext, "F3");
+    TMenuItem_C* file_new = c_menuitem_new("~N~ew", C_cmNew, C_kbCtrlN, C_hcNoContext, "Ctrl-N");
+    TMenuItem_C* file_save = c_menuitem_new("~S~ave", C_cmSave, C_kbF2, C_hcNoContext, "F2");
+    TMenuItem_C* file_saveas = c_menuitem_new("S~a~ve as...", C_cmSaveAs, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* file_line1 = c_menuitem_newline();
+    TMenuItem_C* file_chdir = c_menuitem_new("~C~hange dir...", C_cmChangeDrct, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* file_dos = c_menuitem_new("~D~OS shell", C_cmDosShell, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* file_exit = c_menuitem_new("E~x~it", C_cmQuit, C_kbCtrlQ, C_hcNoContext, "Ctrl-Q");
     
-    item = c_menuitem_new("~O~pen", cmOpen, C_kbF3, C_hcNoContext, "F3");
-    fileMenu = c_submenu_add_item(fileMenu, item);
+    TMenuItem_C* file_items = c_menuitem_append(file_open, file_new);
+    file_items = c_menuitem_append(file_items, file_save);
+    file_items = c_menuitem_append(file_items, file_saveas);
+    file_items = c_menuitem_append(file_items, file_line1);
+    file_items = c_menuitem_append(file_items, file_chdir);
+    file_items = c_menuitem_append(file_items, file_dos);
+    file_items = c_menuitem_append(file_items, file_exit);
     
-    item = c_menuitem_new("~N~ew", cmNew, C_kbCtrlN, C_hcNoContext, "Ctrl-N");
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_new("~S~ave", cmSave, C_kbF2, C_hcNoContext, "F2");
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_new("S~a~ve as...", cmSaveAs, C_kbNoKey, C_hcNoContext, NULL);
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_newline();
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_new("~C~hange dir...", cmChangeDrct, C_kbNoKey, C_hcNoContext, NULL);
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_new("~D~OS shell", cmDosShell, C_kbNoKey, C_hcNoContext, NULL);
-    fileMenu = c_submenu_add_item(fileMenu, item);
-    
-    item = c_menuitem_new("E~x~it", C_cmQuit, C_kbCtrlQ, C_hcNoContext, "Ctrl-Q");
-    fileMenu = c_submenu_add_item(fileMenu, item);
+    TSubMenu_C* file_menu = c_submenu_new("~F~ile", C_kbAltF, C_hcNoContext);
+    file_menu = c_submenu_add_item(file_menu, file_items);
     
     /* Edit menu */
-    editMenu = c_submenu_new("~E~dit", C_kbAltE, C_hcNoContext);
+    TMenuItem_C* edit_undo = c_menuitem_new("~U~ndo", C_cmUndo, C_kbCtrlU, C_hcNoContext, "Ctrl-U");
+    TMenuItem_C* edit_line1 = c_menuitem_newline();
+    TMenuItem_C* edit_cut = c_menuitem_new("Cu~t~", C_cmCut, C_kbShiftDel, C_hcNoContext, "Shift-Del");
+    TMenuItem_C* edit_copy = c_menuitem_new("~C~opy", C_cmCopy, C_kbCtrlIns, C_hcNoContext, "Ctrl-Ins");
+    TMenuItem_C* edit_paste = c_menuitem_new("~P~aste", C_cmPaste, C_kbShiftIns, C_hcNoContext, "Shift-Ins");
+    TMenuItem_C* edit_line2 = c_menuitem_newline();
+    TMenuItem_C* edit_clear = c_menuitem_new("~C~lear", C_cmClear, C_kbCtrlDel, C_hcNoContext, "Ctrl-Del");
     
-    item = c_menuitem_new("~U~ndo", cmUndo, C_kbCtrlU, C_hcNoContext, "Ctrl-U");
-    editMenu = c_submenu_add_item(editMenu, item);
+    TMenuItem_C* edit_items = c_menuitem_append(edit_undo, edit_line1);
+    edit_items = c_menuitem_append(edit_items, edit_cut);
+    edit_items = c_menuitem_append(edit_items, edit_copy);
+    edit_items = c_menuitem_append(edit_items, edit_paste);
+    edit_items = c_menuitem_append(edit_items, edit_line2);
+    edit_items = c_menuitem_append(edit_items, edit_clear);
     
-    item = c_menuitem_newline();
-    editMenu = c_submenu_add_item(editMenu, item);
-    
-    item = c_menuitem_new("Cu~t~", cmCut, C_kbShiftDel, C_hcNoContext, "Shift-Del");
-    editMenu = c_submenu_add_item(editMenu, item);
-    
-    item = c_menuitem_new("~C~opy", cmCopy, C_kbCtrlIns, C_hcNoContext, "Ctrl-Ins");
-    editMenu = c_submenu_add_item(editMenu, item);
-    
-    item = c_menuitem_new("~P~aste", cmPaste, C_kbShiftIns, C_hcNoContext, "Shift-Ins");
-    editMenu = c_submenu_add_item(editMenu, item);
-    
-    item = c_menuitem_newline();
-    editMenu = c_submenu_add_item(editMenu, item);
-    
-    item = c_menuitem_new("~C~lear", cmClear, C_kbCtrlDel, C_hcNoContext, "Ctrl-Del");
-    editMenu = c_submenu_add_item(editMenu, item);
+    TSubMenu_C* edit_menu = c_submenu_new("~E~dit", C_kbAltE, C_hcNoContext);
+    edit_menu = c_submenu_add_item(edit_menu, edit_items);
     
     /* Search menu */
-    searchMenu = c_submenu_new("~S~earch", C_kbAltS, C_hcNoContext);
+    TMenuItem_C* search_find = c_menuitem_new("~F~ind...", C_cmFind, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* search_replace = c_menuitem_new("~R~eplace...", C_cmReplace, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* search_again = c_menuitem_new("~S~earch again", C_cmSearchAgain, C_kbNoKey, C_hcNoContext, NULL);
     
-    item = c_menuitem_new("~F~ind...", cmFind, C_kbNoKey, C_hcNoContext, NULL);
-    searchMenu = c_submenu_add_item(searchMenu, item);
+    TMenuItem_C* search_items = c_menuitem_append(search_find, search_replace);
+    search_items = c_menuitem_append(search_items, search_again);
     
-    item = c_menuitem_new("~R~eplace...", cmReplace, C_kbNoKey, C_hcNoContext, NULL);
-    searchMenu = c_submenu_add_item(searchMenu, item);
-    
-    item = c_menuitem_new("~S~earch again", cmSearchAgain, C_kbNoKey, C_hcNoContext, NULL);
-    searchMenu = c_submenu_add_item(searchMenu, item);
+    TSubMenu_C* search_menu = c_submenu_new("~S~earch", C_kbAltS, C_hcNoContext);
+    search_menu = c_submenu_add_item(search_menu, search_items);
     
     /* Windows menu */
-    windowsMenu = c_submenu_new("~W~indows", C_kbAltW, C_hcNoContext);
+    TMenuItem_C* win_resize = c_menuitem_new("~S~ize/move", C_cmResize, C_kbCtrlF5, C_hcNoContext, "Ctrl-F5");
+    TMenuItem_C* win_zoom = c_menuitem_new("~Z~oom", C_cmZoom, C_kbF5, C_hcNoContext, "F5");
+    TMenuItem_C* win_tile = c_menuitem_new("~T~ile", C_cmTile, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* win_cascade = c_menuitem_new("C~a~scade", C_cmCascade, C_kbNoKey, C_hcNoContext, NULL);
+    TMenuItem_C* win_next = c_menuitem_new("~N~ext", C_cmNext, C_kbF6, C_hcNoContext, "F6");
+    TMenuItem_C* win_prev = c_menuitem_new("~P~revious", C_cmPrev, C_kbShiftF6, C_hcNoContext, "Shift-F6");
+    TMenuItem_C* win_close = c_menuitem_new("~C~lose", C_cmClose, C_kbCtrlW, C_hcNoContext, "Ctrl+W");
     
-    item = c_menuitem_new("~S~ize/move", C_cmResize, C_kbCtrlF5, C_hcNoContext, "Ctrl-F5");
-    windowsMenu = c_submenu_add_item(windowsMenu, item);
+    TMenuItem_C* win_items = c_menuitem_append(win_resize, win_zoom);
+    win_items = c_menuitem_append(win_items, win_tile);
+    win_items = c_menuitem_append(win_items, win_cascade);
+    win_items = c_menuitem_append(win_items, win_next);
+    win_items = c_menuitem_append(win_items, win_prev);
+    win_items = c_menuitem_append(win_items, win_close);
     
-    item = c_menuitem_new("~Z~oom", C_cmZoom, C_kbF5, C_hcNoContext, "F5");
-    windowsMenu = c_submenu_add_item(windowsMenu, item);
-    
-    item = c_menuitem_new("~N~ext", C_cmNext, C_kbF6, C_hcNoContext, "F6");
-    windowsMenu = c_submenu_add_item(windowsMenu, item);
-    
-    item = c_menuitem_new("~P~revious", C_cmPrev, C_kbShiftF6, C_hcNoContext, "Shift-F6");
-    windowsMenu = c_submenu_add_item(windowsMenu, item);
-    
-    item = c_menuitem_new("~C~lose", C_cmClose, C_kbCtrlW, C_hcNoContext, "Ctrl+W");
-    windowsMenu = c_submenu_add_item(windowsMenu, item);
+    TSubMenu_C* win_menu = c_submenu_new("~W~indows", C_kbAltW, C_hcNoContext);
+    win_menu = c_submenu_add_item(win_menu, win_items);
     
     /* Combine all menus */
-    fileMenu = c_submenu_add_submenu(fileMenu, editMenu);
-    fileMenu = c_submenu_add_submenu(fileMenu, searchMenu);
-    fileMenu = c_submenu_add_submenu(fileMenu, windowsMenu);
+    TSubMenu_C* menubar = file_menu;
+    menubar = c_submenu_add_submenu(menubar, edit_menu);
+    menubar = c_submenu_add_submenu(menubar, search_menu);
+    menubar = c_submenu_add_submenu(menubar, win_menu);
     
-    return fileMenu;
+    return menubar;
 }
 
-/*
- * Build the status line
- */
+/* Build the status line (similar to TEditorApp::initStatusLine) */
 TStatusDef_C* build_statusline(void)
 {
-    TStatusDef_C* statusDef;
-    TStatusItem_C* item;
+    TStatusItem_C* item1 = c_statusitem_new(NULL, C_kbAltX, C_cmQuit);
+    TStatusItem_C* item2 = c_statusitem_new("~F2~ Save", C_kbF2, C_cmSave);
+    TStatusItem_C* item3 = c_statusitem_new("~F3~ Open", C_kbF3, C_cmOpen);
+    TStatusItem_C* item4 = c_statusitem_new("~Ctrl-W~ Close", C_kbAltF3, C_cmClose);
+    TStatusItem_C* item5 = c_statusitem_new("~F5~ Zoom", C_kbF5, C_cmZoom);
+    TStatusItem_C* item6 = c_statusitem_new("~F6~ Next", C_kbF6, C_cmNext);
+    TStatusItem_C* item7 = c_statusitem_new("~F10~ Menu", C_kbF10, C_cmMenu);
+    TStatusItem_C* item8 = c_statusitem_new(NULL, C_kbShiftDel, C_cmCut);
+    TStatusItem_C* item9 = c_statusitem_new(NULL, C_kbCtrlIns, C_cmCopy);
+    TStatusItem_C* item10 = c_statusitem_new(NULL, C_kbShiftIns, C_cmPaste);
+    TStatusItem_C* item11 = c_statusitem_new(NULL, C_kbCtrlF5, C_cmResize);
     
-    statusDef = c_statusdef_new(0, 0xFFFF, NULL);
+    TStatusItem_C* items = c_statusitem_append(item1, item2);
+    items = c_statusitem_append(items, item3);
+    items = c_statusitem_append(items, item4);
+    items = c_statusitem_append(items, item5);
+    items = c_statusitem_append(items, item6);
+    items = c_statusitem_append(items, item7);
+    items = c_statusitem_append(items, item8);
+    items = c_statusitem_append(items, item9);
+    items = c_statusitem_append(items, item10);
+    items = c_statusitem_append(items, item11);
     
-    item = c_statusitem_new(NULL, C_kbAltX, C_cmQuit);
-    statusDef = c_statusdef_add_item(statusDef, item);
+    TStatusDef_C* statusdef = c_statusdef_new(0, 0xFFFF, items);
     
-    item = c_statusitem_new("~F2~ Save", C_kbF2, cmSave);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new("~F3~ Open", C_kbF3, cmOpen);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new("~Ctrl-W~ Close", C_kbAltF3, C_cmClose);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new("~F5~ Zoom", C_kbF5, C_cmZoom);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new("~F6~ Next", C_kbF6, C_cmNext);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new("~F10~ Menu", C_kbF10, C_cmMenu);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new(NULL, C_kbShiftDel, cmCut);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new(NULL, C_kbCtrlIns, cmCopy);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new(NULL, C_kbShiftIns, cmPaste);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    item = c_statusitem_new(NULL, C_kbCtrlF5, C_cmResize);
-    statusDef = c_statusdef_add_item(statusDef, item);
-    
-    return statusDef;
+    return statusdef;
 }
 
-/*
- * Main application
- */
 int main(int argc, char** argv)
 {
-    TApplication_C* app;
-    TSubMenu_C* menu;
-    TStatusDef_C* statusDef;
+    printf("=== capplication C Wrapper Example ===\n\n");
+    printf("This example demonstrates building a Turbo Vision application\n");
+    printf("from C code using the capplication, cmenuitem, and cstatusline wrappers.\n\n");
+    printf("Creating an editor-like application similar to TEditorApp...\n\n");
     
-    /* Commands to disable initially (like TEditorApp does) */
-    unsigned short disabledCommands[] = {
-        cmSave, cmSaveAs, cmCut, cmCopy, cmPaste,
-        cmClear, cmUndo, cmFind, cmReplace, cmSearchAgain
-    };
+    /* Build the menu bar */
+    TSubMenu_C* menubar = build_menubar();
     
-    printf("=== Turbo Vision Application from C ===\n");
-    printf("Building application...\n");
+    /* Build the status line */
+    TStatusDef_C* statusline = build_statusline();
     
-    /* Create the application */
-    app = c_application_new();
-    g_app = app;
+    /* Create the application using the builder pattern */
+    TApplicationBuilder_C* builder = c_application_builder_new();
     
-    /* Build and set menu bar */
-    printf("Building menu bar...\n");
-    menu = build_menubar();
-    c_application_set_menubar(app, menu);
+    /* Configure the application */
+    builder = c_application_builder_set_menubar(builder, menubar);
+    builder = c_application_builder_set_statusline(builder, statusline);
     
-    /* Build and set status line */
-    printf("Building status line...\n");
-    statusDef = build_statusline();
-    c_application_set_statusline(app, statusDef);
+    /* Disable editor commands initially (like TEditorApp does) */
+    // builder = c_application_builder_disable_command(builder, C_cmSave);
+    // builder = c_application_builder_disable_command(builder, C_cmSaveAs);
+    // builder = c_application_builder_disable_command(builder, C_cmCut);
+    // builder = c_application_builder_disable_command(builder, C_cmCopy);
+    // builder = c_application_builder_disable_command(builder, C_cmPaste);
+    // builder = c_application_builder_disable_command(builder, C_cmClear);
+    // builder = c_application_builder_disable_command(builder, C_cmUndo);
+    // builder = c_application_builder_disable_command(builder, C_cmFind);
+    // builder = c_application_builder_disable_command(builder, C_cmReplace);
+    // builder = c_application_builder_disable_command(builder, C_cmSearchAgain);
     
-    /* Register event handlers */
-    printf("Registering event handlers...\n");
-    c_application_register_handler(app, cmOpen, handle_file_open, NULL);
-    c_application_register_handler(app, cmNew, handle_file_new, NULL);
-    c_application_register_handler(app, cmChangeDrct, handle_change_dir, NULL);
-    c_application_register_handler(app, cmDosShell, handle_dos_shell, NULL);
+    /* Build the application (this consumes the builder) */
+    TApplication_C* app = c_application_builder_build(builder);
     
-    /* Disable editor commands initially (no document open) */
-    printf("Disabling editor commands...\n");
-    c_application_disable_commands(app, disabledCommands, 
-        sizeof(disabledCommands) / sizeof(disabledCommands[0]));
-    
-    /* Run the application */
-    printf("Starting application...\n");
-    printf("Press Alt-X or Ctrl-Q to quit\n\n");
-    
-    c_application_run(app);
-    
-    /* Clean up */
-    printf("\nShutting down...\n");
-    c_application_destroy(app);
-    
-    printf("Application terminated successfully.\n");
-    return 0;
+    if (app) {
+        /* Run the application */
+        c_application_run(app);
+        
+        /* Shut down and clean up */
+        c_application_shutdown(app);
+        c_application_destroy(app);
+        
+        printf("\nApplication terminated successfully.\n");
+        return 0;
+    } else {
+        printf("ERROR: Failed to create application!\n");
+        return 1;
+    }
 }
 
 // Made with Bob

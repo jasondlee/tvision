@@ -1,165 +1,126 @@
 /*----------------------------------------------------------*/
 /*                                                          */
-/*   capplication.cpp - C builder API for TApplication     */
+/*   capplication.cpp - C wrappers for TApplication        */
 /*                                                          */
-/*   Implementation of C interface for TApplication        */
+/*   Implementation of C interface for Turbo Vision apps   */
 /*                                                          */
 /*----------------------------------------------------------*/
 
 #define Uses_TApplication
+#define Uses_TProgInit
 #define Uses_TMenuBar
 #define Uses_TStatusLine
-#define Uses_TRect
 #define Uses_TSubMenu
+#define Uses_TMenuItem
 #define Uses_TStatusDef
-#define Uses_TCommandSet
-#define Uses_TEvent
-#define Uses_TFileDialog
-#define Uses_TChDirDialog
+#define Uses_TRect
 #define Uses_TDeskTop
+#define Uses_TCommandSet
 #include <tvision/tv.h>
 
 #include "capplication.h"
 #include "../cmenuitem/cmenuitem.h"
 #include "../cstatusline/cstatusline.h"
 
-#include <map>
-#include <string.h>
+#include <vector>
 
 /*
- * Custom TApplication subclass that can be configured from C
+ * Internal builder structure
  */
-class CApplication : public TApplication
-{
-public:
-    CApplication();
-    virtual ~CApplication();
-    
-    // Set menu and status line
-    void setMenuBar(TSubMenu* menu);
-    void setStatusLine(TStatusDef* statusDef);
-    
-    // Command handlers
-    void registerHandler(ushort command, CEventHandler handler, void* userData);
-    virtual void handleEvent(TEvent& event) override;
-    
-    // Command enable/disable
-    void enableCommand(ushort command);
-    void disableCommand(ushort command);
-    void enableCommands(const ushort* commands, int count);
-    void disableCommands(const ushort* commands, int count);
-    
-protected:
-    virtual TMenuBar* initMenuBar(TRect r) override;
-    virtual TStatusLine* initStatusLine(TRect r) override;
-    
-private:
-    TSubMenu* customMenu;
-    TStatusDef* customStatusDef;
-    
-    struct HandlerInfo {
-        CEventHandler handler;
-        void* userData;
-    };
-    std::map<ushort, HandlerInfo> handlers;
+struct TApplicationBuilder_C {
+    TSubMenu *menuBar;
+    TStatusDef *statusLine;
+    std::vector<unsigned short> enabledCommands;
+    std::vector<unsigned short> disabledCommands;
+
+    TApplicationBuilder_C()
+        : menuBar(nullptr), statusLine(nullptr) {
+    }
+
+    ~TApplicationBuilder_C() {
+        // Note: menuBar and statusLine will be owned by TApplication
+        // so we don't delete them here
+    }
 };
 
-CApplication::CApplication() :
-    TProgInit(CApplication::initStatusLine,
-              CApplication::initMenuBar,
-              CApplication::initDeskTop),
-    TApplication(),
-    customMenu(nullptr),
-    customStatusDef(nullptr)
-{
-}
+/*
+ * Custom TApplication subclass that uses builder-provided components
+ */
+class CApplication : public TApplication {
+private:
+    TSubMenu *customMenuBar;
+    TStatusDef *customStatusLine;
 
-CApplication::~CApplication()
-{
-    // Note: TApplication destructor will clean up menu and status line
-}
+    static TMenuBar *initMenuBarStatic(TRect r);
 
-void CApplication::setMenuBar(TSubMenu* menu)
-{
-    customMenu = menu;
-}
+    static TStatusLine *initStatusLineStatic(TRect r);
 
-void CApplication::setStatusLine(TStatusDef* statusDef)
-{
-    customStatusDef = statusDef;
-}
+    static CApplication *currentInstance;
 
-TMenuBar* CApplication::initMenuBar(TRect r)
-{
-    if (customMenu) {
-        r.b.y = r.a.y + 1;
-        return new TMenuBar(r, *customMenu);
-    }
-    return nullptr;
-}
+public:
+    CApplication(TSubMenu *menuBar,
+                 TStatusDef *statusLine
+                 // const std::vector<unsigned short>& enabledCmds,
+                 // const std::vector<unsigned short>& disabledCmds
+    );
 
-TStatusLine* CApplication::initStatusLine(TRect r)
-{
-    if (customStatusDef) {
-        r.a.y = r.b.y - 1;
-        return new TStatusLine(r, *customStatusDef);
-    }
-    return nullptr;
-}
+    virtual ~CApplication();
+};
 
-void CApplication::registerHandler(ushort command, CEventHandler handler, void* userData)
-{
-    HandlerInfo info;
-    info.handler = handler;
-    info.userData = userData;
-    handlers[command] = info;
-}
+// Static member initialization
+CApplication *CApplication::currentInstance = nullptr;
 
-void CApplication::handleEvent(TEvent& event)
-{
-    TApplication::handleEvent(event);
-    
-    if (event.what == evCommand) {
-        ushort cmd = event.message.command;
-        auto it = handlers.find(cmd);
-        if (it != handlers.end()) {
-            // Call the C handler
-            it->second.handler(this, cmd, it->second.userData);
-            clearEvent(event);
+CApplication::CApplication(TSubMenu *menuBar,
+                           TStatusDef *statusLine
+                           // const std::vector<unsigned short>& enabledCmds,
+                           // const std::vector<unsigned short>& disabledCmds
+)
+    : TProgInit(CApplication::initStatusLineStatic,
+                CApplication::initMenuBarStatic,
+                TApplication::initDeskTop),
+      TApplication(),
+      customMenuBar(menuBar),
+      customStatusLine(statusLine) {
+    currentInstance = this;
+
+    // Enable/disable commands as specified
+    /*
+    if (!enabledCmds.empty() || !disabledCmds.empty()) {
+        TCommandSet ts;
+
+        for (unsigned short cmd : enabledCmds) {
+            ts.enableCmd(cmd);
+        }
+        for (unsigned short cmd : disabledCmds) {
+            ts.enableCmd(cmd);
+        }
+
+        if (!disabledCmds.empty()) {
+            disableCommands(ts);
         }
     }
+*/
 }
 
-void CApplication::enableCommand(ushort command)
-{
-    TCommandSet ts;
-    ts.enableCmd(command);
-    enableCommands(ts);
+CApplication::~CApplication() {
+    currentInstance = nullptr;
+    // TApplication destructor will clean up menuBar and statusLine
 }
 
-void CApplication::disableCommand(ushort command)
-{
-    TCommandSet ts;
-    ts.enableCmd(command);
-    disableCommands(ts);
-}
-
-void CApplication::enableCommands(const ushort* commands, int count)
-{
-    TCommandSet ts;
-    for (int i = 0; i < count; i++) {
-        ts.enableCmd(commands[i]);
+TMenuBar *CApplication::initMenuBarStatic(TRect r) {
+    if (currentInstance && currentInstance->customMenuBar) {
+        r.b.y = r.a.y + 1;
+        return new TMenuBar(r, *currentInstance->customMenuBar);
     }
-    enableCommands(ts);
+    return nullptr;
 }
 
-void CApplication::disableCommands(const ushort* commands, int count)
-{
-    TCommandSet ts;
-    for (int i = 0; i < count; i++) {
-        ts.enableCmd(commands[i]);
+TStatusLine *CApplication::initStatusLineStatic(TRect r) {
+    if (currentInstance && currentInstance->customStatusLine) {
+        r.a.y = r.b.y - 1;
+        return new TStatusLine(r, *currentInstance->customStatusLine);
     }
-    disableCommands(ts);
+    return nullptr;
 }
 
 /*
@@ -167,149 +128,95 @@ void CApplication::disableCommands(const ushort* commands, int count)
  */
 
 extern "C" {
-
-TApplication_C* c_application_new(void)
-{
-    CApplication* app = new CApplication();
-    return reinterpret_cast<TApplication_C*>(app);
+TApplicationBuilder_C *c_application_builder_new(void) {
+    return new TApplicationBuilder_C();
 }
 
-void c_application_set_menubar(TApplication_C* app, TSubMenu_C* menu)
-{
-    if (!app || !menu) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    TSubMenu* submenu = reinterpret_cast<TSubMenu*>(menu);
-    capp->setMenuBar(submenu);
-}
-
-void c_application_set_statusline(TApplication_C* app, TStatusDef_C* statusDef)
-{
-    if (!app || !statusDef) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    TStatusDef* def = reinterpret_cast<TStatusDef*>(statusDef);
-    capp->setStatusLine(def);
-}
-
-void c_application_register_handler(
-    TApplication_C* app,
-    unsigned short command,
-    CEventHandler handler,
-    void* userData
-)
-{
-    if (!app || !handler) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->registerHandler(command, handler, userData);
-}
-
-void c_application_enable_command(TApplication_C* app, unsigned short command)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->enableCommand(command);
-}
-
-void c_application_disable_command(TApplication_C* app, unsigned short command)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->disableCommand(command);
-}
-
-void c_application_enable_commands(TApplication_C* app, const unsigned short* commands, int count)
-{
-    if (!app || !commands) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->enableCommands(commands, count);
-}
-
-void c_application_disable_commands(TApplication_C* app, const unsigned short* commands, int count)
-{
-    if (!app || !commands) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->disableCommands(commands, count);
-}
-
-void c_application_run(TApplication_C* app)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->run();
-}
-
-void c_application_destroy(TApplication_C* app)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->shutDown();
-    delete capp;
-}
-
-void* c_application_get_ptr(TApplication_C* app)
-{
-    return reinterpret_cast<void*>(app);
-}
-
-void c_application_cascade(TApplication_C* app)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->cascade();
-}
-
-void c_application_tile(TApplication_C* app)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->tile();
-}
-
-unsigned short c_application_exec_file_dialog(
-    TApplication_C* app,
-    const char* wildcard,
-    const char* title,
-    char* resultBuffer,
-    int bufferSize
-)
-{
-    if (!app || !wildcard || !title || !resultBuffer || bufferSize <= 0) {
-        return cmCancel;
+TApplicationBuilder_C *c_application_builder_set_menubar(
+    TApplicationBuilder_C *builder,
+    TSubMenu_C *menu) {
+    if (builder && menu) {
+        builder->menuBar = reinterpret_cast<TSubMenu *>(menu);
     }
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    
-    // Initialize result buffer with wildcard
-    strncpy(resultBuffer, wildcard, bufferSize - 1);
-    resultBuffer[bufferSize - 1] = '\0';
-    
-    // Execute the file dialog
-    ushort result = capp->execDialog(
-        new TFileDialog(wildcard, title, "~N~ame", fdOpenButton, 100),
-        resultBuffer
+    return builder;
+}
+
+TApplicationBuilder_C *c_application_builder_set_statusline(
+    TApplicationBuilder_C *builder,
+    TStatusDef_C *statusDef) {
+    if (builder && statusDef) {
+        builder->statusLine = reinterpret_cast<TStatusDef *>(statusDef);
+    }
+    return builder;
+}
+
+TApplicationBuilder_C *c_application_builder_enable_command(
+    TApplicationBuilder_C *builder,
+    unsigned short command) {
+    if (builder) {
+        builder->enabledCommands.push_back(command);
+    }
+    return builder;
+}
+
+TApplicationBuilder_C *c_application_builder_disable_command(
+    TApplicationBuilder_C *builder,
+    unsigned short command) {
+    if (builder) {
+        builder->disabledCommands.push_back(command);
+    }
+    return builder;
+}
+
+TApplication_C *c_application_builder_build(TApplicationBuilder_C *builder) {
+    if (!builder) {
+        return nullptr;
+    }
+
+    CApplication *app = new CApplication(
+        builder->menuBar,
+        builder->statusLine
+        // ,
+        // builder->enabledCommands,
+        // builder->disabledCommands
     );
-    
-    return result;
+
+    // Clean up builder
+    delete builder;
+
+    return reinterpret_cast<TApplication_C *>(app);
 }
 
-void c_application_exec_chdir_dialog(TApplication_C* app)
-{
-    if (!app) return;
-    
-    CApplication* capp = reinterpret_cast<CApplication*>(app);
-    capp->execDialog(new TChDirDialog(cdNormal, 0), nullptr);
+void c_application_builder_destroy(TApplicationBuilder_C *builder) {
+    if (builder) {
+        delete builder;
+    }
 }
 
+void c_application_run(TApplication_C *app) {
+    if (app) {
+        TApplication *application = reinterpret_cast<TApplication *>(app);
+        application->run();
+    }
+}
+
+void c_application_shutdown(TApplication_C *app) {
+    if (app) {
+        TApplication *application = reinterpret_cast<TApplication *>(app);
+        application->shutDown();
+    }
+}
+
+void c_application_destroy(TApplication_C *app) {
+    if (app) {
+        CApplication *application = reinterpret_cast<CApplication *>(app);
+        delete application;
+    }
+}
+
+void *c_application_get_ptr(TApplication_C *app) {
+    return reinterpret_cast<void *>(app);
+}
 } // extern "C"
 
 // Made with Bob
