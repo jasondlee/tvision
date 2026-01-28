@@ -171,8 +171,6 @@ add_subdirectory(source)
 # Examples
 
 add_subdirectory(examples)
-add_subdirectory(cmenuitem)
-add_subdirectory(cstatusline)
 add_subdirectory(capplication)
 
 # Test

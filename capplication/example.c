@@ -6,9 +6,10 @@
 /*                                                          */
 /*----------------------------------------------------------*/
 
+#include "ckeys.h"
 #include "capplication.h"
-#include "../cmenuitem/cmenuitem.h"
-#include "../cstatusline/cstatusline.h"
+#include "cmenuitem.h"
+#include "cstatusline.h"
 #include <stdio.h>
 
 /*

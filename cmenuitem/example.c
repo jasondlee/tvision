@@ -6,7 +6,7 @@
 /*                                                          */
 /*----------------------------------------------------------*/
 
-#include "cmenuitem.h"
+#include "../capplication/cmenuitem.h"
 #include <stdio.h>
 
 /*

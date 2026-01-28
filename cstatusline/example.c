@@ -6,7 +6,7 @@
 /*                                                          */
 /*----------------------------------------------------------*/
 
-#include "cstatusline.h"
+#include "../capplication/cstatusline.h"
 #include <stdio.h>
 
 /*

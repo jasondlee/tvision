@@ -19,8 +19,8 @@
 #include <tvision/tv.h>
 
 #include "capplication.h"
-#include "../cmenuitem/cmenuitem.h"
-#include "../cstatusline/cstatusline.h"
+#include "cmenuitem.h"
+#include "cstatusline.h"
 
 #include <vector>
 
