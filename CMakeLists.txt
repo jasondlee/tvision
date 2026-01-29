@@ -171,7 +171,7 @@ add_subdirectory(source)
 # Examples
 
 add_subdirectory(examples)
-add_subdirectory(capplication)
+add_subdirectory(cvision)
 
 # Test
 

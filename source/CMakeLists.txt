@@ -3,7 +3,10 @@
 file(GLOB_RECURSE TVSOURCE "${CMAKE_CURRENT_LIST_DIR}/*/*.cpp")
 list(REMOVE_ITEM TVSOURCE "${CMAKE_CURRENT_LIST_DIR}/tvision/geninc.cpp")
 
-add_library(${PROJECT_NAME} STATIC ${TVSOURCE})
+add_library(${PROJECT_NAME} STATIC ${TVSOURCE}
+        ../cvision/cvision.cpp
+        ../cvision/cvision.h
+        ../cvision/ctypes.h)
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_14)

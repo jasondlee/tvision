@@ -1,5 +1,3 @@
-*
-
 # Manually include root-level directories
 !examples/
 !examples/**/
@@ -60,3 +58,4 @@ CMakeScripts
 Makefile
 cmake_install.cmake
 compile_commands.json
+build
