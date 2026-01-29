@@ -6,47 +6,34 @@
 #include "cvision.h"
 #include <stdio.h>
 
-#include "ckeys.h"
-
 /* Command constants */
 #define CM_NEW_WINDOW   100
 #define CM_LIST_DEMO    101
 #define CM_EDITOR_DEMO  102
 #define CM_ABOUT        103
 
-/* Command codes */
-#define TV_CM_VALID         0
-#define TV_CM_QUIT          1
-#define TV_CM_ERROR         2
-#define TV_CM_MENU          3
-#define TV_CM_CLOSE         4
-#define TV_CM_ZOOM          5
-#define TV_CM_RESIZE        6
-#define TV_CM_NEXT          7
-#define TV_CM_PREV          8
-#define TV_CM_OK            10
-#define TV_CM_CANCEL        11
-#define TV_CM_YES           12
-#define TV_CM_NO            13
-#define TV_CM_DEFAULT       14
+tv_StatusLine* createStatusLine(const tv_Rect r) {
+    tv_StatusItem* items =
+        tv_statusitem_create("~F2~ New", kbF2, CM_NEW_WINDOW,
+        tv_statusitem_create("~F3~ List", kbF3, CM_LIST_DEMO,
+        tv_statusitem_create("~F4~ Editor", kbF4, CM_EDITOR_DEMO,
+    tv_statusitem_create("~Alt+X~ Exit", 0, cmQuit, NULL))));
 
-
-tv_StatusLine* createStatusLine(tv_Rect r) {
-    printf("Creating status line\n");
-    return NULL;
+    return tv_statusline_create(r, items);
 }
 
 tv_MenuBar* createMenuBar(tv_Rect r) {
     /* Create menu items */
-    tv_MenuItem* file_menu = tv_menuitem_create("~N~ew Window", CM_NEW_WINDOW, C_kbF2, NULL,
-        tv_menuitem_create("~L~ist Demo", CM_LIST_DEMO, C_kbF3, NULL,
-        tv_menuitem_create("~E~ditor Demo", CM_EDITOR_DEMO, C_kbF4, NULL,
-        tv_menuitem_create("E~x~it", TV_CM_QUIT, 0, NULL, NULL))));
+    tv_MenuItem* file_menu = tv_menuitem_create("~N~ew Window", CM_NEW_WINDOW, kbF2, NULL,
+        tv_menuitem_create("~L~ist Demo", CM_LIST_DEMO, kbF3, NULL,
+        tv_menuitem_create("~E~ditor Demo", CM_EDITOR_DEMO, kbF4, NULL,
+        tv_menuitem_create("E~x~it", cmQuit, 0, NULL, NULL))));
 
     tv_MenuItem* help_menu = tv_menuitem_create("~A~bout", CM_ABOUT, 0, NULL, NULL);
 
-    tv_SubMenu* menu = tv_submenu_create("~F~ile", C_kbAltF);
+    tv_SubMenu* menu = tv_submenu_create("~F~ile", kbAltF);
     tv_submenu_add_menuitem(menu, file_menu);
+    tv_submenu_add_menuitem(menu, help_menu);
 
     /* Create menu bar */
     // tv_Rect r = tv_rect_make(0, 0, 80, 1);
@@ -58,7 +45,7 @@ tv_Application* app;
 
 void handleEvent(tv_Event e) {
     //printf("Handling event: %d\n", e.what);
-    if (e.what == TV_CM_QUIT) {
+    if (e.what == cmQuit) {
         tv_application_destroy(app);
     }
 }

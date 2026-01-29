@@ -5,52 +5,125 @@
 #ifndef TVISION_CTYPES_H
 #define TVISION_CTYPES_H
 
+#define Uses_EventCodes
+#define Uses_fpbase
+#define Uses_fpstream
+#define Uses_ifpstream
+#define Uses_iopstream
+#define Uses_ipstream
+#define Uses_MsgBox
+#define Uses_ofpstream
+#define Uses_opstream
+#define Uses_otstream
+#define Uses_pstream
 #define Uses_TApplication
-#define Uses_TProgram
+#define Uses_TBackground
+#define Uses_TButton
+#define Uses_TChDirDialog
+#define Uses_TCheckBoxes
+#define Uses_TClipboard
+#define Uses_TCluster
+#define Uses_TCollection
+#define Uses_TColorAttr
+#define Uses_TColorDialog
+#define Uses_TColorDisplay
+#define Uses_TColorGroup
+#define Uses_TColorGroupList
+#define Uses_TColorItem
+#define Uses_TColorItemList
+#define Uses_TColorSelector
+#define Uses_TCommandSet
 #define Uses_TDeskTop
-#define Uses_TMenuBar
-#define Uses_TStatusLine
-#define Uses_TMenu
-#define Uses_TMenuItem
-#define Uses_TSubMenu
-#define Uses_TStatusItem
-#define Uses_TStatusDef
-#define Uses_TRect
-#define Uses_TEvent
 #define Uses_TDialog
+#define Uses_TDirCollection
+#define Uses_TDirEntry
+#define Uses_TDirListBox
+#define Uses_TDrawBuffer
+#define Uses_TDrawSurface
+#define Uses_TEditor
+#define Uses_TEditWindow
+#define Uses_TEvent
+#define Uses_TEventQueue
+#define Uses_TFileCollection
+#define Uses_TFileDialog
+#define Uses_TFileEditor
+#define Uses_TFileInfoPane
+#define Uses_TFileInputLine
+#define Uses_TFileList
+#define Uses_TFindDialogRec
+#define Uses_TFrame
+#define Uses_TGroup
+#define Uses_THardwareInfo
+#define Uses_THistory
+#define Uses_THistoryViewer
+#define Uses_THistoryWindow
+#define Uses_TIndicator
+#define Uses_TInputLine
+#define Uses_TKeys
+#define Uses_TLabel
+#define Uses_TListBox
+#define Uses_TListViewer
+#define Uses_TMemo
+#define Uses_TMenu
+#define Uses_TMenuBar
+#define Uses_TMenuBox
+#define Uses_TMenuItem
+#define Uses_TMenuPopup
+#define Uses_TMenuView
+#define Uses_TMonoSelector
+#define Uses_TMultiCheckBoxes
+#define Uses_TNSCollection
+#define Uses_TNSSortedCollection
+#define Uses_TObject
+#define Uses_TOutline
+#define Uses_TOutlineViewer
+#define Uses_TPalette
+#define Uses_TParamText
+#define Uses_TPoint
+#define Uses_TPReadObjects
+#define Uses_TProgram
+#define Uses_TPWrittenObjects
+#define Uses_TRadioButtons
+#define Uses_TRect
+#define Uses_TReplaceDialogRec
+#define Uses_TResourceCollection
+#define Uses_TResourceFile
+#define Uses_TResourceItem
+#define Uses_TScreen
+#define Uses_TScreenCell
+#define Uses_TScrollBar
+#define Uses_TScroller
+#define Uses_TSearchRec
+#define Uses_TSItem
+#define Uses_TSortedCollection
+#define Uses_TSortedListBox
+#define Uses_TStaticText
+#define Uses_TStatusDef
+#define Uses_TStatusItem
+#define Uses_TStatusLine
+#define Uses_TStreamable
+#define Uses_TStreamableClass
+#define Uses_TStreamableTypes
+#define Uses_TStrIndexRec
+#define Uses_TStringCollection
+#define Uses_TStringList
+#define Uses_TStrListMaker
+#define Uses_TSubMenu
+#define Uses_TSurfaceView
+#define Uses_TSystemError
+#define Uses_TTerminal
+#define Uses_TText
+#define Uses_TTextDevice
+#define Uses_TTimerQueue
+#define Uses_TView
+#define Uses_TVMemMgr
 #define Uses_TWindow
+#define Uses_ViewCommands
 
-/* Event codes */
-#define TV_EV_MOUSE_DOWN    0x0001
-#define TV_EV_MOUSE_UP      0x0002
-#define TV_EV_MOUSE_MOVE    0x0004
-#define TV_EV_MOUSE_AUTO    0x0008
-#define TV_EV_MOUSE_WHEEL   0x0020
-#define TV_EV_KEY_DOWN      0x0010
-#define TV_EV_COMMAND       0x0100
-#define TV_EV_BROADCAST     0x0200
+typedef unsigned short ushort;
 
-/* Event masks */
-#define TV_EV_NOTHING       0x0000
-#define TV_EV_MOUSE         0x002f
-#define TV_EV_KEYBOARD      0x0010
-#define TV_EV_MESSAGE       0xFF00
-
-/* Mouse button state masks */
-#define TV_MB_LEFT_BUTTON   0x01
-#define TV_MB_RIGHT_BUTTON  0x02
-#define TV_MB_MIDDLE_BUTTON 0x04
-
-/* Mouse wheel state masks */
-#define TV_MW_UP            0x01
-#define TV_MW_DOWN          0x02
-#define TV_MW_LEFT          0x04
-#define TV_MW_RIGHT         0x08
-
-/* Mouse event flags */
-#define TV_ME_MOUSE_MOVED   0x01
-#define TV_ME_DOUBLE_CLICK  0x02
-#define TV_ME_TRIPLE_CLICK  0x04
+#include "ckeys.h"
+#include "ccommands.h"
 
 /* Maximum text size for key events */
 #define TV_MAX_CHAR_SIZE    4
@@ -73,8 +146,6 @@ typedef struct tv_StatusItem tv_StatusItem;
 typedef unsigned short tv_ushort;
 typedef unsigned char tv_uchar;
 typedef unsigned int tv_uint;
-
-/* Boolean type */
 typedef int tv_bool;
 
 /* TPoint wrapper - simple struct, direct mapping */

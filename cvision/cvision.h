@@ -46,12 +46,19 @@ tv_MenuItem *tv_menuitem_create(const char *name, tv_ushort command, tv_ushort k
                                 const char *help_ctx, tv_MenuItem *next);
 tv_SubMenu* tv_submenu_create(const char* name, tv_ushort key_code);
 tv_SubMenu* tv_submenu_add_menuitem(tv_SubMenu* submenu, tv_MenuItem* item);
-// tv_MenuItem* tv_menuitem_create_submenu(const char* name, tv_MenuItem* submenu, tv_MenuItem* next);
-// tv_MenuItem* tv_menuitem_create_separator(tv_MenuItem* next);
 
 /* TMenuBar functions */
 tv_MenuBar* tv_menubar_create(tv_Rect bounds, tv_SubMenu* menu);
 void tv_menubar_destroy(tv_MenuBar* menubar);
+
+/* Status item helper functions */
+tv_StatusItem* tv_statusitem_create(const char* text, tv_ushort key_code, tv_ushort command,
+                                     tv_StatusItem* next);
+void tv_statusitem_destroy(tv_StatusItem* item);
+
+/* TStatusLine functions */
+tv_StatusLine* tv_statusline_create(tv_Rect bounds, tv_StatusItem* items);
+void tv_statusline_destroy(tv_StatusLine* statusline);
 
 /* TRect functions */
 tv_Rect tv_rect_make(int ax, int ay, int bx, int by);
