@@ -7,46 +7,58 @@
 #include <stdio.h>
 
 /* Command constants */
-#define CM_NEW_WINDOW   100
-#define CM_LIST_DEMO    101
-#define CM_EDITOR_DEMO  102
-#define CM_ABOUT        103
+const ushort
+        cmNewWindow = 100,
+        cmListDemo = 101,
+        cmEditorDemo = 102,
+        cmAbout = 103;
 
 tv_StatusLine* createStatusLine(const tv_Rect r) {
     tv_StatusItem* items =
-        tv_statusitem_create("~F2~ New", kbF2, CM_NEW_WINDOW,
-        tv_statusitem_create("~F3~ List", kbF3, CM_LIST_DEMO,
-        tv_statusitem_create("~F4~ Editor", kbF4, CM_EDITOR_DEMO,
+        tv_statusitem_create("~F2~ New", kbF2, cmNewWindow,
+        tv_statusitem_create("~F3~ List", kbF3, cmListDemo,
+        tv_statusitem_create("~F4~ Editor", kbF4, cmEditorDemo,
     tv_statusitem_create("~Alt+X~ Exit", 0, cmQuit, NULL))));
 
-    return tv_statusline_create(r, items);
+    return tv_statusline_create(tv_rect_make(r.ax, r.by-1, r.bx, r.by ), items);
 }
 
 tv_MenuBar* createMenuBar(tv_Rect r) {
     /* Create menu items */
-    tv_MenuItem* file_menu = tv_menuitem_create("~N~ew Window", CM_NEW_WINDOW, kbF2, NULL,
-        tv_menuitem_create("~L~ist Demo", CM_LIST_DEMO, kbF3, NULL,
-        tv_menuitem_create("~E~ditor Demo", CM_EDITOR_DEMO, kbF4, NULL,
-        tv_menuitem_create("E~x~it", cmQuit, 0, NULL, NULL))));
+    tv_SubMenu* about_menu = tv_submenu_create("~\xF0~", kbAltSpace);
+    tv_submenu_add_menuitem(about_menu, tv_menuitem_create("~A~bout...", cmAbout, kbAltA, NULL, NULL));
 
-    tv_MenuItem* help_menu = tv_menuitem_create("~A~bout", CM_ABOUT, 0, NULL, NULL);
 
-    tv_SubMenu* menu = tv_submenu_create("~F~ile", kbAltF);
-    tv_submenu_add_menuitem(menu, file_menu);
-    tv_submenu_add_menuitem(menu, help_menu);
+    tv_SubMenu* file_menu = tv_submenu_create("~F~ile", kbAltF);
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~N~ew Window", cmNewWindow, kbF2, NULL, NULL));
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~L~ist Demo", cmListDemo, kbF3, NULL, NULL));
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~E~ditor Demo", cmEditorDemo, kbF4, NULL, NULL));
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("E~x~it", cmQuit, 0, NULL, NULL));
 
+
+    tv_submenu_add_next(about_menu, file_menu);
     /* Create menu bar */
-    // tv_Rect r = tv_rect_make(0, 0, 80, 1);
-    return tv_menubar_create(r, menu);
+    return tv_menubar_create(tv_rect_make(r.ax, r.ay, r.bx, r.ay + 1 ), about_menu);
 }
 
 
 tv_Application* app;
 
 void handleEvent(tv_Event e) {
-    //printf("Handling event: %d\n", e.what);
     if (e.what == cmQuit) {
         tv_application_destroy(app);
+    }
+
+    switch( e.data.message.command ) {
+        case cmNewWindow:
+        case cmListDemo:
+        case cmEditorDemo:
+            break;
+        case cmAbout:
+           tv_message_box("This is a demo application of the C wrapper for magiblot's Turbo Vision library.", 0x0001 | 0x0400 );
+            break;
+        default:
+            return ;
     }
 }
 

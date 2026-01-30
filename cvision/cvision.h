@@ -45,6 +45,7 @@ void tv_application_run(tv_Application *app);
 tv_MenuItem *tv_menuitem_create(const char *name, tv_ushort command, tv_ushort key_code,
                                 const char *help_ctx, tv_MenuItem *next);
 tv_SubMenu* tv_submenu_create(const char* name, tv_ushort key_code);
+tv_SubMenu* tv_submenu_add_next(tv_SubMenu* submenu, tv_SubMenu* next);
 tv_SubMenu* tv_submenu_add_menuitem(tv_SubMenu* submenu, tv_MenuItem* item);
 
 /* TMenuBar functions */
@@ -62,6 +63,9 @@ void tv_statusline_destroy(tv_StatusLine* statusline);
 
 /* TRect functions */
 tv_Rect tv_rect_make(int ax, int ay, int bx, int by);
+
+/* Message box functions */
+ushort tv_message_box(const char* message, ushort flags);
 
 #endif //TVISION_CVISION_H
 

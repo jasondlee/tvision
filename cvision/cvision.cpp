@@ -74,13 +74,17 @@ extern "C" {
     tv_MenuItem* tv_menuitem_create(const char* name, tv_ushort command, tv_ushort key_code,
                                      const char* help_ctx, tv_MenuItem* next) {
         return reinterpret_cast<tv_MenuItem*>(
-            new TMenuItem(name, command, key_code, hcNoContext, help_ctx,
-                         reinterpret_cast<TMenuItem*>(next))
+            new TMenuItem(name, command, key_code, hcNoContext, help_ctx, reinterpret_cast<TMenuItem*>(next))
         );
     }
 
     tv_SubMenu* tv_submenu_create(const char* name, tv_ushort key_code) {
         return reinterpret_cast<tv_SubMenu*>(new TSubMenu(name, key_code));
+    }
+
+    tv_SubMenu* tv_submenu_add_next(tv_SubMenu* submenu, tv_SubMenu* next) {
+        *reinterpret_cast<TSubMenu*>(submenu) + *reinterpret_cast<TSubMenu*>(next);
+        return submenu;
     }
 
     tv_SubMenu* tv_submenu_add_menuitem(tv_SubMenu* submenu, tv_MenuItem* item) {
@@ -149,5 +153,9 @@ extern "C" {
         r.bx = bx;
         r.by = by;
         return r;
+    }
+
+    ushort tv_message_box(const char* msg, ushort flags) {
+        return messageBox (msg, flags );
     }
 }
