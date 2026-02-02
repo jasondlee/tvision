@@ -9,6 +9,12 @@ add_library(cvision STATIC
         cvision.h
         ckeys.h
         ccommands.h
+        cmenu.cpp
+        cstatusbar.cpp
+        cdialogs.cpp
+        cdialogs.h
+        ceditors.cpp
+        ceditors.h
 )
 
 # Link against tvision and the other C wrapper libraries
