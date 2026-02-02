@@ -25,39 +25,7 @@ typedef struct tv_TDisplay tv_TDisplay;
 typedef struct tv_TScreen tv_TScreen;
 typedef struct tv_TSystemError tv_TSystemError;
 typedef struct tv_TTimer tv_TTimer;
-
-/* Event codes */
-#define TV_EV_MOUSE_DOWN    0x0001
-#define TV_EV_MOUSE_UP      0x0002
-#define TV_EV_MOUSE_MOVE    0x0004
-#define TV_EV_MOUSE_AUTO    0x0008
-#define TV_EV_MOUSE_WHEEL   0x0020
-#define TV_EV_KEY_DOWN      0x0010
-#define TV_EV_COMMAND       0x0100
-#define TV_EV_BROADCAST     0x0200
-
-/* Event masks */
-#define TV_EV_NOTHING       0x0000
-#define TV_EV_MOUSE         0x002f
-#define TV_EV_KEYBOARD      0x0010
-#define TV_EV_MESSAGE       0xFF00
-
-/* Mouse button state masks */
-#define TV_MB_LEFT_BUTTON   0x01
-#define TV_MB_RIGHT_BUTTON  0x02
-#define TV_MB_MIDDLE_BUTTON 0x04
-
-/* Mouse wheel state masks */
-#define TV_MW_UP            0x01
-#define TV_MW_DOWN          0x02
-#define TV_MW_LEFT          0x04
-#define TV_MW_RIGHT         0x08
-
-/* Mouse event flags */
-#define TV_ME_MOUSE_MOVED   0x01
-#define TV_ME_DOUBLE_CLICK  0x02
-#define TV_ME_TRIPLE_CLICK  0x04
-
+    
 /* Structs - Note: tv_TEvent and related types are defined in ctypes.h */
 typedef struct tv_MouseEventType {
     tv_Point where;

@@ -366,6 +366,46 @@ extern "C" {
 #define positionalEvents    (evMouse & ~evMouseWheel)
 #define focusedEvents       (evKeyboard | evCommand)
 
+#if !defined( __EVENT_CODES )
+#define __EVENT_CODES
+    /* Event codes */
+
+#define evMouseDown  0x0001
+#define evMouseUp    0x0002
+#define evMouseMove  0x0004
+#define evMouseAuto  0x0008
+#define evMouseWheel 0x0020
+#define evKeyDown    0x0010
+#define evCommand    0x0100
+#define evBroadcast  0x0200
+
+    /* Event masks */
+
+#define evNothing    0x0000
+#define evMouse      0x002f
+#define evKeyboard   0x0010
+#define evMessage    0xFF00
+
+    /* Mouse button state masks */
+
+#define mbLeftButton   0x01
+#define mbRightButton  0x02
+#define mbMiddleButton 0x04
+
+    /* Mouse wheel state masks */
+
+#define mwUp      0x01
+#define mwDown    0x02
+#define mwLeft    0x04
+#define mwRight   0x08
+
+    /* Mouse event flags */
+
+#define meMouseMoved   0x01
+#define meDoubleClick  0x02
+#define meTripleClick  0x04
+#endif
+
 #ifdef __cplusplus
 }
 #endif
