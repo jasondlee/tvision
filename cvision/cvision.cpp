@@ -51,9 +51,12 @@ extern "C" {
                                           tv_MenuBar *(*cMenuBar)(tv_Rect),
                                           void (*handleEventFunc)(tv_Event)) {
         // Cast function pointers from C wrapper types to C++ types
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-function-type-mismatch"
         auto statusLineFunc = reinterpret_cast<TStatusLine *(*)(TRect)>(cStatusLine);
         auto menuBarFunc = reinterpret_cast<TMenuBar *(*)(TRect)>(cMenuBar);
         auto eventFunc = reinterpret_cast<void (*)(TEvent)>(handleEventFunc);
+#pragma GCC diagnostic pop
 
         return reinterpret_cast<tv_Application*>(
             new TCApplication(statusLineFunc, menuBarFunc, eventFunc)

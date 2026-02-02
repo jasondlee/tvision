@@ -124,6 +124,12 @@ typedef unsigned short ushort;
 
 #include "cconsts.h"
 
+/* Maximum text size for key events */
+#define TV_MAX_CHAR_SIZE    4
+
+#define TV_FALSE 0
+#define TV_TRUE 1
+
 #ifdef __cplusplus
 extern "C" {
 #endif
