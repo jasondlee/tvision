@@ -22,6 +22,8 @@ add_library(cvision STATIC
         cstddlg.h
         csystem.cpp
         csystem.h
+        ctkeys.cpp
+        ctkeys.h
         ctypes.h
         cvision.cpp
         cvision.h

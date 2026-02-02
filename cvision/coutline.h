@@ -8,17 +8,16 @@
 #define TVISION_COUTLINE_H
 
 #include "ctypes.h"
+#include "cobjects.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Outline constants */
-#define TV_OV_EXPANDED 0x01
-#define TV_OV_CHILDREN 0x02
-#define TV_OV_LAST     0x04
-
-#define TV_CM_OUTLINE_ITEM_SELECTED 301
+extern const int tv_ovExpanded;
+extern const int tv_ovChildren;
+extern const int tv_ovLast;
+extern const int tv_cmOutlineItemSelected;
     
 /* Callback types for traverse functions */
 typedef tv_bool (*tv_OutlineVisitor)(tv_OutlineViewer*, tv_Node*, int, int, long, tv_ushort, void*);
@@ -52,8 +51,10 @@ tv_Node* tv_outlineviewer_first_that(tv_OutlineViewer* viewer, tv_OutlineVisitor
 tv_Node* tv_outlineviewer_first_that_no_arg(tv_OutlineViewer* viewer, tv_OutlineVisitorNoArg test);
 tv_Node* tv_outlineviewer_for_each(tv_OutlineViewer* viewer, tv_OutlineVisitor action, void* arg);
 tv_Node* tv_outlineviewer_for_each_no_arg(tv_OutlineViewer* viewer, tv_OutlineVisitorNoArg action);
+char* tv_outlineviewer_get_graph(tv_OutlineViewer* viewer, int level, long lines, tv_ushort flags);
 char* tv_outlineviewer_create_graph(tv_OutlineViewer* viewer, int level, long lines, tv_ushort flags,
                                      int lev_width, int end_width, const char* chars);
+tv_Palette* tv_outlineviewer_get_palette(tv_OutlineViewer* viewer);
 int tv_outlineviewer_get_foc(tv_OutlineViewer* viewer);
 
 /* TOutline functions */

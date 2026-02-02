@@ -6,6 +6,7 @@
 #define TVISION_CDIALOGS_H
 
 #include "ctypes.h"
+#include "cobjects.h"
 
 #ifdef __cplusplus
 extern "C" {

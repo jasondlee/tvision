@@ -124,18 +124,6 @@ typedef unsigned short ushort;
 
 #include "cconsts.h"
 
-/* TPoint structure - defined here to avoid circular dependency */
-typedef struct tv_Point {
-    int x;
-    int y;
-} tv_Point;
-
-/* TRect structure - defined here to avoid circular dependency */
-typedef struct tv_Rect {
-    tv_Point a;
-    tv_Point b;
-} tv_Rect;
-
 /* Maximum text size for key events */
 #define TV_MAX_CHAR_SIZE    4
 
@@ -164,6 +152,7 @@ typedef struct tv_MultiCheckBoxes tv_MultiCheckBoxes;
 typedef struct tv_Node tv_Node;
 typedef struct tv_Outline tv_Outline;
 typedef struct tv_OutlineViewer tv_OutlineViewer;
+typedef struct tv_Palette tv_Palette;
 typedef struct tv_ParamText tv_ParamText;
 typedef struct tv_RadioButtons tv_RadioButtons;
 typedef struct tv_SItem tv_SItem;
@@ -174,46 +163,64 @@ typedef struct tv_StatusLine tv_StatusLine;
 typedef struct tv_SubMenu tv_SubMenu;
 typedef struct tv_Validator tv_Validator;
 typedef struct tv_View tv_View;
+typedef struct tv_TMouse tv_TMouse;
+typedef struct tv_TEventQueue tv_TEventQueue;
+typedef struct tv_TTimerQueue tv_TTimerQueue;
+typedef struct tv_TScreen tv_TScreen;
+typedef struct tv_TSystemError tv_TSystemError;
 
 /* Basic type definitions */
+typedef unsigned int tv_TimerId;
 typedef unsigned short tv_ushort;
 typedef unsigned char tv_uchar;
 typedef unsigned int tv_uint;
 typedef int tv_bool;
 
-/* Mouse event structure */
-typedef struct tv_MouseEvent {
-    tv_Point where;
-    tv_ushort event_flags;
-    tv_ushort control_key_state;
-    tv_uchar buttons;
-    tv_uchar wheel;
-} tv_MouseEvent;
+/* TPoint structure - defined here to avoid circular dependency */
+typedef struct tv_Point {
+    int x;
+    int y;
+} tv_Point;
 
-/* Key event structure */
-typedef struct tv_KeyEvent {
-    tv_ushort key_code;
-    tv_ushort control_key_state;
-    char text[TV_MAX_CHAR_SIZE];
-    tv_uchar text_length;
-} tv_KeyEvent;
+/* TRect structure - defined here to avoid circular dependency */
+typedef struct tv_Rect {
+    tv_Point a;
+    tv_Point b;
+} tv_Rect;
 
-/* Message event structure */
-typedef struct tv_MessageEvent {
+/* KeyDownEvent structure */
+typedef struct {
+    tv_ushort keyCode;
+    tv_ushort controlKeyState;
+    char text[4];  /* maxCharSize */
+    unsigned char textLength;
+} tv_KeyDownEvent;
+
+/* MessageEvent structure */
+typedef struct {
     tv_ushort command;
-    void *info_ptr;
+    void *infoPtr;
 } tv_MessageEvent;
 
-/* Main event structure */
-typedef struct tv_Event {
-    tv_ushort what;
+/* MouseEventType structure */
+typedef struct {
+    tv_Point where;
+    tv_ushort eventFlags;
+    tv_ushort controlKeyState;
+    unsigned char buttons;
+    unsigned char wheel;
+} tv_MouseEventType;
 
+/* TEvent structure */
+typedef struct {
+    tv_ushort what;
     union {
-        tv_MouseEvent mouse;
-        tv_KeyEvent key;
+        tv_MouseEventType mouse;
+        tv_KeyDownEvent keyDown;
         tv_MessageEvent message;
     } data;
 } tv_Event;
+
 
 #ifdef __cplusplus
 }

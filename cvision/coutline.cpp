@@ -4,11 +4,18 @@
 // C wrappers for TOutline and TOutlineViewer classes
 //
 
+#include "cobjects.h"
+#include "csystem.h"
 #include "coutline.h"
 #include "cvision.h"
 #include <tvision/tv.h>
 
 extern "C" {
+
+extern const int tv_ovExpanded = ovExpanded;
+extern const int tv_ovChildren = ovChildren;
+extern const int tv_ovLast = ovLast;
+extern const int tv_cmOutlineItemSelected = cmOutlineItemSelected;
 
 /* TNode functions */
 
@@ -168,11 +175,23 @@ tv_Node* tv_outlineviewer_for_each_no_arg(tv_OutlineViewer* viewer, tv_OutlineVi
     );
 }
 
+char* tv_outlineviewer_get_graph(tv_OutlineViewer* viewer, int level, long lines, tv_ushort flags) {
+    if (!viewer) return nullptr;
+    return reinterpret_cast<TOutlineViewer*>(viewer)->getGraph(level, lines, flags);
+}
+
 char* tv_outlineviewer_create_graph(tv_OutlineViewer* viewer, int level, long lines, tv_ushort flags,
                                      int lev_width, int end_width, const char* chars) {
     if (!viewer) return nullptr;
     return reinterpret_cast<TOutlineViewer*>(viewer)->createGraph(
         level, lines, flags, lev_width, end_width, chars
+    );
+}
+
+tv_Palette* tv_outlineviewer_get_palette(tv_OutlineViewer* viewer) {
+    if (!viewer) return nullptr;
+    return reinterpret_cast<tv_Palette*>(
+        &(reinterpret_cast<TOutlineViewer*>(viewer)->getPalette())
     );
 }
 

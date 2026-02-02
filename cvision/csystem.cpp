@@ -1,60 +1,47 @@
 //
-// C wrappers for Turbo Vision system classes
-// Created following the pattern in cmenu.cpp
+// Created by Jason Lee on 2/2/26.
 //
 
 #include "csystem.h"
 #include "cvision.h"
 #include <tvision/tv.h>
-#include <cstring>
+#include <cstddef>
 
 extern "C" {
 
-/* THWMouse functions - Note: THWMouse methods are protected, use TMouse instead */
+/* Event codes */
+const int tv_evMouseDown = evMouseDown;
+const int tv_evMouseUp = evMouseUp;
+const int tv_evMouseMove = evMouseMove;
+const int tv_evMouseAuto = evMouseAuto;
+const int tv_evMouseWheel = evMouseWheel;
+const int tv_evKeyDown = evKeyDown;
+const int tv_evCommand = evCommand;
+const int tv_evBroadcast = evBroadcast;
 
-void tv_hwmouse_show(void) {
-    TMouse::show();
-}
+/* Event masks */
+const int tv_evNothing = evNothing;
+const int tv_evMouse = evMouse;
+const int tv_evKeyboard = evKeyboard;
+const int tv_evMessage = evMessage;
 
-void tv_hwmouse_hide(void) {
-    TMouse::hide();
-}
+/* Mouse button state masks */
+const int tv_mbLeftButton = mbLeftButton;
+const int tv_mbRightButton = mbRightButton;
+const int tv_mbMiddleButton = mbMiddleButton;
 
-void tv_hwmouse_set_range(tv_ushort rx, tv_ushort ry) {
-    TMouse::setRange(rx, ry);
-}
+/* Mouse wheel state masks */
+const int tv_mwUp = mwUp;
+const int tv_mwDown = mwDown;
+const int tv_mwLeft = mwLeft;
+const int tv_mwRight = mwRight;
 
-void tv_hwmouse_get_event(tv_MouseEventType *event) {
-    if (event) {
-        MouseEventType me;
-        TMouse::getEvent(me);
-        event->where.x = me.where.x;
-        event->where.y = me.where.y;
-        event->eventFlags = me.eventFlags;
-        event->controlKeyState = me.controlKeyState;
-        event->buttons = me.buttons;
-        event->wheel = me.wheel;
-    }
-}
-
-tv_bool tv_hwmouse_present(void) {
-    return TMouse::present() ? 1 : 0;
-}
-
-void tv_hwmouse_suspend(void) {
-    TMouse::suspend();
-}
-
-void tv_hwmouse_resume(void) {
-    TMouse::resume();
-}
-
-void tv_hwmouse_inhibit(void) {
-    // Note: inhibit() is protected in THWMouse, not accessible
-}
+/* Mouse event flags */
+const int tv_meMouseMoved = meMouseMoved;
+const int tv_meDoubleClick = meDoubleClick;
+const int tv_meTripleClick = meTripleClick;
 
 /* TMouse functions */
-
 tv_TMouse *tv_mouse_create(void) {
     return reinterpret_cast<tv_TMouse *>(new TMouse());
 }
@@ -91,7 +78,7 @@ void tv_mouse_get_event(tv_MouseEventType *event) {
 }
 
 tv_bool tv_mouse_present(void) {
-    return TMouse::present() ? 1 : 0;
+    return TMouse::present(); // ? tv_True : tv_False;
 }
 
 void tv_mouse_suspend(void) {
@@ -103,7 +90,6 @@ void tv_mouse_resume(void) {
 }
 
 /* TEventQueue functions */
-
 tv_TEventQueue *tv_eventqueue_create(void) {
     return reinterpret_cast<tv_TEventQueue *>(new TEventQueue());
 }
@@ -114,30 +100,34 @@ void tv_eventqueue_destroy(tv_TEventQueue *queue) {
     }
 }
 
-void tv_eventqueue_get_mouse_event(tv_TEvent *event) {
+void tv_eventqueue_get_mouse_event(tv_Event *event) {
     if (event) {
         TEvent ev;
         TEventQueue::getMouseEvent(ev);
         event->what = ev.what;
-        event->data.mouse.where.x = ev.mouse.where.x;
-        event->data.mouse.where.y = ev.mouse.where.y;
-        event->data.mouse.event_flags = ev.mouse.eventFlags;
-        event->data.mouse.control_key_state = ev.mouse.controlKeyState;
-        event->data.mouse.buttons = ev.mouse.buttons;
-        event->data.mouse.wheel = ev.mouse.wheel;
+        if (ev.what & evMouse) {
+            event->data.mouse.where.x = ev.mouse.where.x;
+            event->data.mouse.where.y = ev.mouse.where.y;
+            event->data.mouse.eventFlags = ev.mouse.eventFlags;
+            event->data.mouse.controlKeyState = ev.mouse.controlKeyState;
+            event->data.mouse.buttons = ev.mouse.buttons;
+            event->data.mouse.wheel = ev.mouse.wheel;
+        }
     }
 }
 
-void tv_eventqueue_get_key_event(tv_TEvent *event) {
+void tv_eventqueue_get_key_event(tv_Event *event) {
     if (event) {
         TEvent ev;
         TEventQueue::getKeyEvent(ev);
         event->what = ev.what;
-        event->data.key.key_code = ev.keyDown.keyCode;
-        event->data.key.control_key_state = ev.keyDown.controlKeyState;
-        event->data.key.text_length = ev.keyDown.textLength;
-        if (ev.keyDown.textLength > 0 && ev.keyDown.textLength <= 4) {
-            memcpy(event->data.key.text, ev.keyDown.text, ev.keyDown.textLength);
+        if (ev.what & evKeyboard) {
+            event->data.keyDown.keyCode = ev.keyDown.keyCode;
+            event->data.keyDown.controlKeyState = ev.keyDown.controlKeyState;
+            event->data.keyDown.textLength = ev.keyDown.textLength;
+            for (int i = 0; i < ev.keyDown.textLength && i < 4; i++) {
+                event->data.keyDown.text[i] = ev.keyDown.text[i];
+            }
         }
     }
 }
@@ -159,92 +149,63 @@ void tv_eventqueue_wake_up(void) {
 }
 
 void tv_eventqueue_set_paste_text(const char *text, size_t length) {
-    if (text && length > 0) {
+    if (text) {
         TEventQueue::setPasteText(TStringView(text, length));
     }
 }
 
-/* TEvent functions */
-
-void tv_event_get_mouse_event(tv_TEvent *event) {
-    if (event) {
-        TEvent ev;
-        ev.getMouseEvent();
-        event->what = ev.what;
-        event->data.mouse.where.x = ev.mouse.where.x;
-        event->data.mouse.where.y = ev.mouse.where.y;
-        event->data.mouse.event_flags = ev.mouse.eventFlags;
-        event->data.mouse.control_key_state = ev.mouse.controlKeyState;
-        event->data.mouse.buttons = ev.mouse.buttons;
-        event->data.mouse.wheel = ev.mouse.wheel;
-    }
+/* TEventQueue static variables accessors */
+tv_ushort tv_eventqueue_get_double_delay(void) {
+    return TEventQueue::doubleDelay;
 }
 
-void tv_event_get_key_event(tv_TEvent *event) {
-    if (event) {
-        TEvent ev;
-        ev.getKeyEvent();
-        event->what = ev.what;
-        event->data.key.key_code = ev.keyDown.keyCode;
-        event->data.key.control_key_state = ev.keyDown.controlKeyState;
-        event->data.key.text_length = ev.keyDown.textLength;
-        if (ev.keyDown.textLength > 0 && ev.keyDown.textLength <= 4) {
-            memcpy(event->data.key.text, ev.keyDown.text, ev.keyDown.textLength);
-        }
-    }
+void tv_eventqueue_set_double_delay(tv_ushort delay) {
+    TEventQueue::doubleDelay = delay;
 }
 
-/* TTimerQueue functions */
-
-tv_TTimerQueue *tv_timerqueue_create(void) {
-    return reinterpret_cast<tv_TTimerQueue *>(new TTimerQueue());
+tv_bool tv_eventqueue_get_mouse_reverse(void) {
+    return TEventQueue::mouseReverse;
 }
 
-tv_TTimerQueue *tv_timerqueue_create_with_func(tv_TTimePoint (*getTimeMs)(void)) {
-    // Note: TTimerQueue expects a function reference, not a pointer
-    // This wrapper is not directly compatible - users should use the default constructor
-    return nullptr;
+void tv_eventqueue_set_mouse_reverse(tv_bool reverse) {
+    TEventQueue::mouseReverse = (reverse == 1);
 }
 
-void tv_timerqueue_destroy(tv_TTimerQueue *queue) {
-    if (queue) {
-        delete reinterpret_cast<TTimerQueue *>(queue);
-    }
-}
-
-tv_TTimerId tv_timerqueue_set_timer(tv_TTimerQueue *queue, uint32_t timeoutMs, int32_t periodMs) {
-    if (queue) {
-        return reinterpret_cast<TTimerQueue *>(queue)->setTimer(timeoutMs, periodMs);
-    }
-    return 0;
-}
-
-void tv_timerqueue_kill_timer(tv_TTimerQueue *queue, tv_TTimerId id) {
-    if (queue) {
-        reinterpret_cast<TTimerQueue *>(queue)->killTimer(id);
-    }
-}
-
-void tv_timerqueue_collect_expired_timers(tv_TTimerQueue *queue, void (*func)(tv_TTimerId, void *), void *args) {
-    // Note: collectExpiredTimers expects a function reference, not a pointer
-    // This is not directly compatible with C function pointers
-    // Users should implement this functionality differently in C
-    (void)queue;
-    (void)func;
-    (void)args;
-}
-
-int32_t tv_timerqueue_time_until_next_timeout(tv_TTimerQueue *queue) {
-    if (queue) {
-        return reinterpret_cast<TTimerQueue *>(queue)->timeUntilNextTimeout();
-    }
-    return -1;
-}
+// /* TTimerQueue functions */
+// tv_TTimerQueue *tv_timerqueue_create(void) {
+//     return reinterpret_cast<tv_TTimerQueue *>(new TTimerQueue());
+// }
+//
+// void tv_timerqueue_destroy(tv_TTimerQueue *queue) {
+//     if (queue) {
+//         delete reinterpret_cast<TTimerQueue *>(queue);
+//     }
+// }
+//
+// tv_TimerId tv_timerqueue_set_timer(tv_TTimerQueue *queue, unsigned int timeoutMs, int periodMs) {
+//     if (queue) {
+//         auto timerId = reinterpret_cast<TTimerQueue *>(queue)->setTimer(timeoutMs, periodMs);
+//         return reinterpret_cast<tv_TimerId>(timerId);
+//     }
+//     return 0;
+// }
+//
+// void tv_timerqueue_kill_timer(tv_TTimerQueue *queue, tv_TimerId id) {
+//     if (queue) {
+//         reinterpret_cast<TTimerQueue *>(queue)->killTimer(id);
+//     }
+// }
+//
+// int tv_timerqueue_time_until_next_timeout(tv_TTimerQueue *queue) {
+//     if (queue) {
+//         return reinterpret_cast<TTimerQueue *>(queue)->timeUntilNextTimeout();
+//     }
+//     return -1;
+// }
 
 /* TClipboard functions */
-
 void tv_clipboard_set_text(const char *text, size_t length) {
-    if (text && length > 0) {
+    if (text) {
         TClipboard::setText(TStringView(text, length));
     }
 }
@@ -253,10 +214,18 @@ void tv_clipboard_request_text(void) {
     TClipboard::requestText();
 }
 
-/* TDisplay functions */
+/* TDisplay video modes */
+const int tv_smBW80 = TDisplay::smBW80;
+const int tv_smCO80 = TDisplay::smCO80;
+const int tv_smMono = TDisplay::smMono;
+const int tv_smFont8x8 = TDisplay::smFont8x8;
+const int tv_smColor256 = TDisplay::smColor256;
+const int tv_smColorHigh = TDisplay::smColorHigh;
+const int tv_smUpdate = TDisplay::smUpdate;
 
-void tv_display_clear_screen(tv_uchar w, tv_uchar h) {
-    TDisplay::clearScreen(w, h);
+/* TDisplay functions */
+void tv_display_clear_screen(unsigned char row, unsigned char col) {
+    TDisplay::clearScreen(row, col);
 }
 
 void tv_display_set_cursor_type(tv_ushort cursorType) {
@@ -284,7 +253,6 @@ tv_ushort tv_display_get_crt_mode(void) {
 }
 
 /* TScreen functions */
-
 tv_TScreen *tv_screen_create(void) {
     return reinterpret_cast<tv_TScreen *>(new TScreen());
 }
@@ -323,8 +291,48 @@ void tv_screen_resume(void) {
     TScreen::resume();
 }
 
-/* TSystemError functions */
+/* TScreen static variables accessors */
+tv_ushort tv_screen_get_startup_mode(void) {
+    return TScreen::startupMode;
+}
 
+tv_ushort tv_screen_get_startup_cursor(void) {
+    return TScreen::startupCursor;
+}
+
+tv_ushort tv_screen_get_screen_mode(void) {
+    return TScreen::screenMode;
+}
+
+tv_ushort tv_screen_get_screen_width(void) {
+    return TScreen::screenWidth;
+}
+
+tv_ushort tv_screen_get_screen_height(void) {
+    return TScreen::screenHeight;
+}
+
+tv_bool tv_screen_get_hi_res_screen(void) {
+    return TScreen::hiResScreen;
+}
+
+tv_bool tv_screen_get_check_snow(void) {
+    return TScreen::checkSnow;
+}
+
+tv_ushort tv_screen_get_cursor_lines(void) {
+    return TScreen::cursorLines;
+}
+
+tv_bool tv_screen_get_clear_on_suspend(void) {
+    return TScreen::clearOnSuspend;
+}
+
+void tv_screen_set_clear_on_suspend(tv_bool value) {
+    TScreen::clearOnSuspend = (value == 1);
+}
+
+/* TSystemError functions */
 tv_TSystemError *tv_systemerror_create(void) {
     return reinterpret_cast<tv_TSystemError *>(new TSystemError());
 }
@@ -343,12 +351,13 @@ void tv_systemerror_resume(void) {
     TSystemError::resume();
 }
 
+/* TSystemError static variables accessors */
 tv_bool tv_systemerror_get_ctrl_break_hit(void) {
-    return TSystemError::ctrlBreakHit ? 1 : 0;
+    return TSystemError::ctrlBreakHit;
 }
 
 void tv_systemerror_set_ctrl_break_hit(tv_bool value) {
-    TSystemError::ctrlBreakHit = value ? True : False;
+    TSystemError::ctrlBreakHit = (value == 1);
 }
 
 } // extern "C"

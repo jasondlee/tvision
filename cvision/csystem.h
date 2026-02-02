@@ -1,51 +1,55 @@
 //
-// C wrappers for Turbo Vision system classes
-// Created following the pattern in cmenu.cpp
+// Created by Jason Lee on 2/2/26.
 //
 
-#ifndef CVISION_CSYSTEM_H
-#define CVISION_CSYSTEM_H
+#ifndef TVISION_CSYSTEM_H
+#define TVISION_CSYSTEM_H
 
-#include <stddef.h>
-#include <stdint.h>
-#include "cobjects.h"
 #include "ctypes.h"
+#include "cobjects.h"
+#include <cstddef>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Forward declarations for opaque types */
-typedef struct tv_THWMouse tv_THWMouse;
-typedef struct tv_TMouse tv_TMouse;
-typedef struct tv_TEventQueue tv_TEventQueue;
-typedef struct tv_TTimerQueue tv_TTimerQueue;
-typedef struct tv_TClipboard tv_TClipboard;
-typedef struct tv_TDisplay tv_TDisplay;
-typedef struct tv_TScreen tv_TScreen;
-typedef struct tv_TSystemError tv_TSystemError;
-typedef struct tv_TTimer tv_TTimer;
-    
-/* Structs - Note: tv_TEvent and related types are defined in ctypes.h */
-typedef struct tv_MouseEventType {
-    tv_Point where;
-    tv_ushort eventFlags;
-    tv_ushort controlKeyState;
-    tv_uchar buttons;
-    tv_uchar wheel;
-} tv_MouseEventType;
+/* Event codes */
+extern const int tv_evMouseDown;
+extern const int tv_evMouseUp;
+extern const int tv_evMouseMove;
+extern const int tv_evMouseAuto;
+extern const int tv_evMouseWheel;
+extern const int tv_evKeyDown;
+extern const int tv_evCommand;
+extern const int tv_evBroadcast;
 
-typedef tv_Event tv_TEvent;
+/* Event masks */
+extern const int tv_evNothing;
+extern const int tv_evMouse;
+extern const int tv_evKeyboard;
+extern const int tv_evMessage;
 
-/* THWMouse functions */
-void tv_hwmouse_show(void);
-void tv_hwmouse_hide(void);
-void tv_hwmouse_set_range(tv_ushort rx, tv_ushort ry);
-void tv_hwmouse_get_event(tv_MouseEventType *event);
-tv_bool tv_hwmouse_present(void);
-void tv_hwmouse_suspend(void);
-void tv_hwmouse_resume(void);
-void tv_hwmouse_inhibit(void);
+/* Mouse button state masks */
+extern const int tv_mbLeftButton;
+extern const int tv_mbRightButton;
+extern const int tv_mbMiddleButton;
+
+/* Mouse wheel state masks */
+extern const int tv_mwUp;
+extern const int tv_mwDown;
+extern const int tv_mwLeft;
+extern const int tv_mwRight;
+
+/* Mouse event flags */
+extern const int tv_meMouseMoved;
+extern const int tv_meDoubleClick;
+extern const int tv_meTripleClick;
+
+/* CharScanType structure */
+typedef struct {
+    unsigned char charCode;
+    unsigned char scanCode;
+} tv_CharScanType;
 
 /* TMouse functions */
 tv_TMouse *tv_mouse_create(void);
@@ -61,50 +65,42 @@ void tv_mouse_resume(void);
 /* TEventQueue functions */
 tv_TEventQueue *tv_eventqueue_create(void);
 void tv_eventqueue_destroy(tv_TEventQueue *queue);
-void tv_eventqueue_get_mouse_event(tv_TEvent *event);
-void tv_eventqueue_get_key_event(tv_TEvent *event);
+void tv_eventqueue_get_mouse_event(tv_Event *event);
+void tv_eventqueue_get_key_event(tv_Event *event);
 void tv_eventqueue_suspend(void);
 void tv_eventqueue_resume(void);
 void tv_eventqueue_wait_for_events(int timeoutMs);
 void tv_eventqueue_wake_up(void);
 void tv_eventqueue_set_paste_text(const char *text, size_t length);
 
-/* TEvent functions */
-void tv_event_get_mouse_event(tv_TEvent *event);
-void tv_event_get_key_event(tv_TEvent *event);
+/* TEventQueue static variables accessors */
+tv_ushort tv_eventqueue_get_double_delay(void);
+void tv_eventqueue_set_double_delay(tv_ushort delay);
+tv_bool tv_eventqueue_get_mouse_reverse(void);
+void tv_eventqueue_set_mouse_reverse(tv_bool reverse);
 
-/* TTimerQueue functions */
-typedef void* tv_TTimerId;
-#ifdef __BORLANDC__
-typedef uint32_t tv_TTimePoint;
-#else
-typedef uint64_t tv_TTimePoint;
-#endif
-
-tv_TTimerQueue *tv_timerqueue_create(void);
-tv_TTimerQueue *tv_timerqueue_create_with_func(tv_TTimePoint (*getTimeMs)(void));
-void tv_timerqueue_destroy(tv_TTimerQueue *queue);
-tv_TTimerId tv_timerqueue_set_timer(tv_TTimerQueue *queue, uint32_t timeoutMs, int32_t periodMs);
-void tv_timerqueue_kill_timer(tv_TTimerQueue *queue, tv_TTimerId id);
-void tv_timerqueue_collect_expired_timers(tv_TTimerQueue *queue, void (*func)(tv_TTimerId, void *), void *args);
-int32_t tv_timerqueue_time_until_next_timeout(tv_TTimerQueue *queue);
+// /* TTimerQueue functions */
+// tv_TTimerQueue *tv_timerqueue_create(void);
+// void tv_timerqueue_destroy(tv_TTimerQueue *queue);
+// tv_TimerId tv_timerqueue_set_timer(tv_TTimerQueue *queue, unsigned int timeoutMs, int periodMs);
+// void tv_timerqueue_kill_timer(tv_TTimerQueue *queue, tv_TimerId id);
+// int tv_timerqueue_time_until_next_timeout(tv_TTimerQueue *queue);
 
 /* TClipboard functions */
 void tv_clipboard_set_text(const char *text, size_t length);
 void tv_clipboard_request_text(void);
 
-/* TDisplay functions */
-enum tv_VideoModes {
-    TV_SM_BW80       = 0x0002,
-    TV_SM_CO80       = 0x0003,
-    TV_SM_MONO       = 0x0007,
-    TV_SM_FONT8X8    = 0x0100,
-    TV_SM_COLOR256   = 0x0200,
-    TV_SM_COLOR_HIGH = 0x0400,
-    TV_SM_UPDATE     = 0x8000
-};
+/* TDisplay video modes */
+extern const int tv_smBW80;
+extern const int tv_smCO80;
+extern const int tv_smMono;
+extern const int tv_smFont8x8;
+extern const int tv_smColor256;
+extern const int tv_smColorHigh;
+extern const int tv_smUpdate;
 
-void tv_display_clear_screen(tv_uchar w, tv_uchar h);
+/* TDisplay functions */
+void tv_display_clear_screen(unsigned char row, unsigned char col);
 void tv_display_set_cursor_type(tv_ushort cursorType);
 tv_ushort tv_display_get_cursor_type(void);
 tv_ushort tv_display_get_rows(void);
@@ -123,11 +119,25 @@ tv_ushort tv_screen_fix_crt_mode(tv_ushort mode);
 void tv_screen_suspend(void);
 void tv_screen_resume(void);
 
+/* TScreen static variables accessors */
+tv_ushort tv_screen_get_startup_mode(void);
+tv_ushort tv_screen_get_startup_cursor(void);
+tv_ushort tv_screen_get_screen_mode(void);
+tv_ushort tv_screen_get_screen_width(void);
+tv_ushort tv_screen_get_screen_height(void);
+tv_bool tv_screen_get_hi_res_screen(void);
+tv_bool tv_screen_get_check_snow(void);
+tv_ushort tv_screen_get_cursor_lines(void);
+tv_bool tv_screen_get_clear_on_suspend(void);
+void tv_screen_set_clear_on_suspend(tv_bool value);
+
 /* TSystemError functions */
 tv_TSystemError *tv_systemerror_create(void);
 void tv_systemerror_destroy(tv_TSystemError *error);
 void tv_systemerror_suspend(void);
 void tv_systemerror_resume(void);
+
+/* TSystemError static variables accessors */
 tv_bool tv_systemerror_get_ctrl_break_hit(void);
 void tv_systemerror_set_ctrl_break_hit(tv_bool value);
 
@@ -135,4 +145,4 @@ void tv_systemerror_set_ctrl_break_hit(tv_bool value);
 }
 #endif
 
-#endif /* CVISION_CSYSTEM_H */
+#endif //TVISION_CSYSTEM_H

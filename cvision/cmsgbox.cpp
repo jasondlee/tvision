@@ -4,6 +4,7 @@
 
 #include "cmsgbox.h"
 #include "ctypes.h"
+#include "cobjects.h"
 #include <tvision/tv.h>
 
 extern "C" {

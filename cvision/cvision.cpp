@@ -4,6 +4,7 @@
 
 #include "ctypes.h"
 #include "cvision.h"
+#include "csystem.h"
 #include <tvision/tv.h>
 
 TCApplication::TCApplication(TStatusLine *(*statusLineFunc)(TRect),

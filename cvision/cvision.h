@@ -5,8 +5,11 @@
 #ifndef TVISION_CVISION_H
 #define TVISION_CVISION_H
 
+
 #ifdef __cplusplus
 #include "ctypes.h"
+#include "csystem.h"
+#include "cobjects.h"
 #include <tvision/tv.h>
 
 class TCApplication : public TApplication {

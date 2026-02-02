@@ -3,8 +3,10 @@
 // C wrappers for Turbo Vision standard dialog classes
 //
 
-#include "cstddlg.h"
+#include "cobjects.h"
+#include "csystem.h"
 #include "ctypes.h"
+#include "cstddlg.h"
 #include <tvision/tv.h>
 
 extern "C" {
@@ -31,20 +33,20 @@ void tv_fileinputline_handle_event(tv_FileInputLine* input, tv_Event* event) {
             event->what == evMouseMove || event->what == evMouseAuto) {
             ev.mouse.where.x = event->data.mouse.where.x;
             ev.mouse.where.y = event->data.mouse.where.y;
-            ev.mouse.eventFlags = event->data.mouse.event_flags;
-            ev.mouse.controlKeyState = event->data.mouse.control_key_state;
+            ev.mouse.eventFlags = event->data.mouse.eventFlags;
+            ev.mouse.controlKeyState = event->data.mouse.controlKeyState;
             ev.mouse.buttons = event->data.mouse.buttons;
             ev.mouse.wheel = event->data.mouse.wheel;
         } else if (event->what == evKeyDown) {
-            ev.keyDown.keyCode = event->data.key.key_code;
-            ev.keyDown.controlKeyState = event->data.key.control_key_state;
-            for (int i = 0; i < event->data.key.text_length && i < TV_MAX_CHAR_SIZE; i++) {
-                ev.keyDown.text[i] = event->data.key.text[i];
+            ev.keyDown.keyCode = event->data.keyDown.keyCode;
+            ev.keyDown.controlKeyState = event->data.keyDown.controlKeyState;
+            for (int i = 0; i < event->data.keyDown.textLength && i < TV_MAX_CHAR_SIZE; i++) {
+                ev.keyDown.text[i] = event->data.keyDown.text[i];
             }
-            ev.keyDown.textLength = event->data.key.text_length;
+            ev.keyDown.textLength = event->data.keyDown.textLength;
         } else if (event->what == evCommand || event->what == evBroadcast) {
             ev.message.command = event->data.message.command;
-            ev.message.infoPtr = event->data.message.info_ptr;
+            ev.message.infoPtr = event->data.message.infoPtr;
         }
         
         reinterpret_cast<TFileInputLine*>(input)->handleEvent(ev);
@@ -122,20 +124,20 @@ void tv_sortedlistbox_handle_event(tv_SortedListBox* listbox, tv_Event* event) {
             event->what == evMouseMove || event->what == evMouseAuto) {
             ev.mouse.where.x = event->data.mouse.where.x;
             ev.mouse.where.y = event->data.mouse.where.y;
-            ev.mouse.eventFlags = event->data.mouse.event_flags;
-            ev.mouse.controlKeyState = event->data.mouse.control_key_state;
+            ev.mouse.eventFlags = event->data.mouse.eventFlags;
+            ev.mouse.controlKeyState = event->data.mouse.controlKeyState;
             ev.mouse.buttons = event->data.mouse.buttons;
             ev.mouse.wheel = event->data.mouse.wheel;
         } else if (event->what == evKeyDown) {
-            ev.keyDown.keyCode = event->data.key.key_code;
-            ev.keyDown.controlKeyState = event->data.key.control_key_state;
-            for (int i = 0; i < event->data.key.text_length && i < TV_MAX_CHAR_SIZE; i++) {
-                ev.keyDown.text[i] = event->data.key.text[i];
+            ev.keyDown.keyCode = event->data.keyDown.keyCode;
+            ev.keyDown.controlKeyState = event->data.keyDown.controlKeyState;
+            for (int i = 0; i < event->data.keyDown.textLength && i < TV_MAX_CHAR_SIZE; i++) {
+                ev.keyDown.text[i] = event->data.keyDown.text[i];
             }
-            ev.keyDown.textLength = event->data.key.text_length;
+            ev.keyDown.textLength = event->data.keyDown.textLength;
         } else if (event->what == evCommand || event->what == evBroadcast) {
             ev.message.command = event->data.message.command;
-            ev.message.infoPtr = event->data.message.info_ptr;
+            ev.message.infoPtr = event->data.message.infoPtr;
         }
         
         reinterpret_cast<TSortedListBox*>(listbox)->handleEvent(ev);
@@ -270,20 +272,20 @@ void tv_fileinfopane_handle_event(tv_FileInfoPane* pane, tv_Event* event) {
             event->what == evMouseMove || event->what == evMouseAuto) {
             ev.mouse.where.x = event->data.mouse.where.x;
             ev.mouse.where.y = event->data.mouse.where.y;
-            ev.mouse.eventFlags = event->data.mouse.event_flags;
-            ev.mouse.controlKeyState = event->data.mouse.control_key_state;
+            ev.mouse.eventFlags = event->data.mouse.eventFlags;
+            ev.mouse.controlKeyState = event->data.mouse.controlKeyState;
             ev.mouse.buttons = event->data.mouse.buttons;
             ev.mouse.wheel = event->data.mouse.wheel;
         } else if (event->what == evKeyDown) {
-            ev.keyDown.keyCode = event->data.key.key_code;
-            ev.keyDown.controlKeyState = event->data.key.control_key_state;
-            for (int i = 0; i < event->data.key.text_length && i < TV_MAX_CHAR_SIZE; i++) {
-                ev.keyDown.text[i] = event->data.key.text[i];
+            ev.keyDown.keyCode = event->data.keyDown.keyCode;
+            ev.keyDown.controlKeyState = event->data.keyDown.controlKeyState;
+            for (int i = 0; i < event->data.keyDown.textLength && i < TV_MAX_CHAR_SIZE; i++) {
+                ev.keyDown.text[i] = event->data.keyDown.text[i];
             }
-            ev.keyDown.textLength = event->data.key.text_length;
+            ev.keyDown.textLength = event->data.keyDown.textLength;
         } else if (event->what == evCommand || event->what == evBroadcast) {
             ev.message.command = event->data.message.command;
-            ev.message.infoPtr = event->data.message.info_ptr;
+            ev.message.infoPtr = event->data.message.infoPtr;
         }
         
         reinterpret_cast<TFileInfoPane*>(pane)->handleEvent(ev);
@@ -328,20 +330,20 @@ void tv_filedialog_handle_event(tv_FileDialog* dialog, tv_Event* event) {
             event->what == evMouseMove || event->what == evMouseAuto) {
             ev.mouse.where.x = event->data.mouse.where.x;
             ev.mouse.where.y = event->data.mouse.where.y;
-            ev.mouse.eventFlags = event->data.mouse.event_flags;
-            ev.mouse.controlKeyState = event->data.mouse.control_key_state;
+            ev.mouse.eventFlags = event->data.mouse.eventFlags;
+            ev.mouse.controlKeyState = event->data.mouse.controlKeyState;
             ev.mouse.buttons = event->data.mouse.buttons;
             ev.mouse.wheel = event->data.mouse.wheel;
         } else if (event->what == evKeyDown) {
-            ev.keyDown.keyCode = event->data.key.key_code;
-            ev.keyDown.controlKeyState = event->data.key.control_key_state;
-            for (int i = 0; i < event->data.key.text_length && i < TV_MAX_CHAR_SIZE; i++) {
-                ev.keyDown.text[i] = event->data.key.text[i];
+            ev.keyDown.keyCode = event->data.keyDown.keyCode;
+            ev.keyDown.controlKeyState = event->data.keyDown.controlKeyState;
+            for (int i = 0; i < event->data.keyDown.textLength && i < TV_MAX_CHAR_SIZE; i++) {
+                ev.keyDown.text[i] = event->data.keyDown.text[i];
             }
-            ev.keyDown.textLength = event->data.key.text_length;
+            ev.keyDown.textLength = event->data.keyDown.textLength;
         } else if (event->what == evCommand || event->what == evBroadcast) {
             ev.message.command = event->data.message.command;
-            ev.message.infoPtr = event->data.message.info_ptr;
+            ev.message.infoPtr = event->data.message.infoPtr;
         }
         
         reinterpret_cast<TFileDialog*>(dialog)->handleEvent(ev);
@@ -532,20 +534,20 @@ void tv_chdirdialog_handle_event(tv_ChDirDialog* dialog, tv_Event* event) {
             event->what == evMouseMove || event->what == evMouseAuto) {
             ev.mouse.where.x = event->data.mouse.where.x;
             ev.mouse.where.y = event->data.mouse.where.y;
-            ev.mouse.eventFlags = event->data.mouse.event_flags;
-            ev.mouse.controlKeyState = event->data.mouse.control_key_state;
+            ev.mouse.eventFlags = event->data.mouse.eventFlags;
+            ev.mouse.controlKeyState = event->data.mouse.controlKeyState;
             ev.mouse.buttons = event->data.mouse.buttons;
             ev.mouse.wheel = event->data.mouse.wheel;
         } else if (event->what == evKeyDown) {
-            ev.keyDown.keyCode = event->data.key.key_code;
-            ev.keyDown.controlKeyState = event->data.key.control_key_state;
-            for (int i = 0; i < event->data.key.text_length && i < TV_MAX_CHAR_SIZE; i++) {
-                ev.keyDown.text[i] = event->data.key.text[i];
+            ev.keyDown.keyCode = event->data.keyDown.keyCode;
+            ev.keyDown.controlKeyState = event->data.keyDown.controlKeyState;
+            for (int i = 0; i < event->data.keyDown.textLength && i < TV_MAX_CHAR_SIZE; i++) {
+                ev.keyDown.text[i] = event->data.keyDown.text[i];
             }
-            ev.keyDown.textLength = event->data.key.text_length;
+            ev.keyDown.textLength = event->data.keyDown.textLength;
         } else if (event->what == evCommand || event->what == evBroadcast) {
             ev.message.command = event->data.message.command;
-            ev.message.infoPtr = event->data.message.info_ptr;
+            ev.message.infoPtr = event->data.message.infoPtr;
         }
         
         reinterpret_cast<TChDirDialog*>(dialog)->handleEvent(ev);

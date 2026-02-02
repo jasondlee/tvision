@@ -4,6 +4,7 @@
 
 #include "ceditors.h"
 #include "ctypes.h"
+#include "cobjects.h"
 #include <tvision/tv.h>
 #include <cstring>
 

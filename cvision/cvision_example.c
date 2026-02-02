@@ -6,6 +6,7 @@
 #include "cvision.h"
 #include "cobjects.h"
 #include "cmenus.h"
+#include "ctkeys.h"
 #include "cmsgbox.h"
 #include <stdio.h>
 
@@ -18,9 +19,9 @@ const ushort
 
 tv_StatusLine *createStatusLine(const tv_Rect r) {
     tv_StatusItem *items =
-            tv_statusitem_create("~F2~ New", kbF2, cmNewWindow,
-                                 tv_statusitem_create("~F3~ List", kbF3, cmListDemo,
-                                                      tv_statusitem_create("~F4~ Editor", kbF4, cmEditorDemo,
+            tv_statusitem_create("~F2~ New", tv_kbF2, cmNewWindow,
+                                 tv_statusitem_create("~F3~ List",  tv_kbF3, cmListDemo,
+                                                      tv_statusitem_create("~F4~ Editor",  tv_kbF4, cmEditorDemo,
                                                                            tv_statusitem_create(
                                                                                "~Alt+X~ Exit", 0, cmQuit, NULL))));
 
@@ -29,14 +30,14 @@ tv_StatusLine *createStatusLine(const tv_Rect r) {
 
 tv_MenuBar *createMenuBar(tv_Rect r) {
     /* Create menu items */
-    tv_SubMenu *about_menu = tv_submenu_create("~\xF0~", kbAltSpace);
-    tv_submenu_add_menuitem(about_menu, tv_menuitem_create("~A~bout...", cmAbout, kbAltA, NULL, NULL));
+    tv_SubMenu *about_menu = tv_submenu_create("~\xF0~",  tv_kbAltSpace);
+    tv_submenu_add_menuitem(about_menu, tv_menuitem_create("~A~bout...", cmAbout,  tv_kbAltA, NULL, NULL));
 
 
-    tv_SubMenu *file_menu = tv_submenu_create("~F~ile", kbAltF);
-    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~N~ew Window", cmNewWindow, kbF2, NULL, NULL));
-    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~L~ist Demo", cmListDemo, kbF3, NULL, NULL));
-    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~E~ditor Demo", cmEditorDemo, kbF4, NULL, NULL));
+    tv_SubMenu *file_menu = tv_submenu_create("~F~ile",  tv_kbAltF);
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~N~ew Window", cmNewWindow,  tv_kbF2, NULL, NULL));
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~L~ist Demo", cmListDemo,  tv_kbF3, NULL, NULL));
+    tv_submenu_add_menuitem(file_menu, tv_menuitem_create("~E~ditor Demo", cmEditorDemo,  tv_kbF4, NULL, NULL));
     tv_submenu_add_menuitem(file_menu, tv_menuitem_create("E~x~it", cmQuit, 0, NULL, NULL));
 
 
