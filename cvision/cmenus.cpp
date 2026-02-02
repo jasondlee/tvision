@@ -10,9 +10,9 @@
 
 extern "C" {
     tv_MenuItem *tv_menuitem_create(const char *name, tv_ushort command, tv_ushort key_code,
-                                    const char *help_ctx, tv_MenuItem *next) {
+                                    tv_ushort help_ctx, const char *p, tv_MenuItem *next) {
         return reinterpret_cast<tv_MenuItem *>(
-            new TMenuItem(name, command, key_code, hcNoContext, help_ctx, reinterpret_cast<TMenuItem *>(next))
+            new TMenuItem(name, command, key_code, help_ctx, p, reinterpret_cast<TMenuItem *>(next))
         );
     }
 

@@ -10,8 +10,7 @@ extern "C" {
 #endif
 
     /* Menu item helper functions */
-    tv_MenuItem *tv_menuitem_create(const char *name, tv_ushort command, tv_ushort key_code,
-                                    const char *help_ctx, tv_MenuItem *next);
+    tv_MenuItem *tv_menuitem_create(const char *name, tv_ushort command, tv_ushort key_code, tv_ushort *help_ctx, const char *p, tv_MenuItem *next);
     tv_SubMenu* tv_submenu_create(const char* name, tv_ushort key_code);
     tv_SubMenu* tv_submenu_add_next(tv_SubMenu* submenu, tv_SubMenu* next);
     tv_SubMenu* tv_submenu_add_menuitem(tv_SubMenu* submenu, tv_MenuItem* item);
