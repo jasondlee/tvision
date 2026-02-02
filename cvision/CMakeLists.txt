@@ -17,6 +17,8 @@ add_library(cvision STATIC
         ceditors.h
         cstddlg.cpp
         cstddlg.h
+        coutline.cpp
+        coutline.h
 )
 
 # Link against tvision and the other C wrapper libraries

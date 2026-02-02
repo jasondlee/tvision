@@ -136,33 +136,33 @@ extern "C" {
 #endif
 
 typedef struct tv_Application tv_Application;
-typedef struct tv_MenuBar tv_MenuBar;
-typedef struct tv_StatusLine tv_StatusLine;
-typedef struct tv_MenuItem tv_MenuItem;
-typedef struct tv_SubMenu tv_SubMenu;
-typedef struct tv_StatusItem tv_StatusItem;
-
-/* Dialogs */
-typedef struct tv_Dialog tv_Dialog;
-typedef struct tv_InputLine tv_InputLine;
 typedef struct tv_Button tv_Button;
-typedef struct tv_Cluster tv_Cluster;
-typedef struct tv_RadioButtons tv_RadioButtons;
 typedef struct tv_CheckBoxes tv_CheckBoxes;
-typedef struct tv_MultiCheckBoxes tv_MultiCheckBoxes;
-typedef struct tv_ListBox tv_ListBox;
-typedef struct tv_StaticText tv_StaticText;
-typedef struct tv_ParamText tv_ParamText;
-typedef struct tv_Label tv_Label;
+typedef struct tv_Cluster tv_Cluster;
+typedef struct tv_Collection tv_Collection;
+typedef struct tv_Dialog tv_Dialog;
 typedef struct tv_History tv_History;
 typedef struct tv_HistoryViewer tv_HistoryViewer;
 typedef struct tv_HistoryWindow tv_HistoryWindow;
+typedef struct tv_InputLine tv_InputLine;
+typedef struct tv_Label tv_Label;
+typedef struct tv_ListBox tv_ListBox;
+typedef struct tv_MenuBar tv_MenuBar;
+typedef struct tv_MenuItem tv_MenuItem;
+typedef struct tv_MultiCheckBoxes tv_MultiCheckBoxes;
+typedef struct tv_Node tv_Node;
+typedef struct tv_Outline tv_Outline;
+typedef struct tv_OutlineViewer tv_OutlineViewer;
+typedef struct tv_ParamText tv_ParamText;
+typedef struct tv_RadioButtons tv_RadioButtons;
 typedef struct tv_SItem tv_SItem;
-typedef struct tv_Validator tv_Validator;
 typedef struct tv_ScrollBar tv_ScrollBar;
-typedef struct tv_Collection tv_Collection;
+typedef struct tv_StaticText tv_StaticText;
+typedef struct tv_StatusItem tv_StatusItem;
+typedef struct tv_StatusLine tv_StatusLine;
+typedef struct tv_SubMenu tv_SubMenu;
+typedef struct tv_Validator tv_Validator;
 typedef struct tv_View tv_View;
-
 
 /* Basic type definitions */
 typedef unsigned short tv_ushort;
