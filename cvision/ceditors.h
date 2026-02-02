@@ -19,89 +19,110 @@ typedef struct tv_Memo tv_Memo;
 typedef struct tv_FileEditor tv_FileEditor;
 typedef struct tv_EditWindow tv_EditWindow;
 
-/* Editor command codes */
-#define TV_UF_UPDATE  0x01
-#define TV_UF_LINE    0x02
-#define TV_UF_VIEW    0x04
+//// Editor update flags
+//
+// Flags used to control editor update behavior
 
-/* Selection modes */
-#define TV_SM_EXTEND  0x01
-#define TV_SM_DOUBLE  0x02
-#define TV_SM_TRIPLE  0x04
+extern const int tv_ufUpdate;
+extern const int tv_ufLine;
+extern const int tv_ufView;
 
-/* Search flags */
-#define TV_SF_SEARCH_FAILED  ((unsigned)-0x01)
+//// Selection mode flags
+//
+// Flags used to control text selection behavior
 
-/* Editor commands */
-#define TV_CM_FIND          82
-#define TV_CM_REPLACE       83
-#define TV_CM_SEARCH_AGAIN  84
+extern const int tv_smExtend;
+extern const int tv_smDouble;
+extern const int tv_smTriple;
 
-/* Navigation commands */
-#define TV_CM_CHAR_LEFT     500
-#define TV_CM_CHAR_RIGHT    501
-#define TV_CM_WORD_LEFT     502
-#define TV_CM_WORD_RIGHT    503
-#define TV_CM_LINE_START    504
-#define TV_CM_LINE_END      505
-#define TV_CM_LINE_UP       506
-#define TV_CM_LINE_DOWN     507
-#define TV_CM_PAGE_UP       508
-#define TV_CM_PAGE_DOWN     509
-#define TV_CM_TEXT_START    510
-#define TV_CM_TEXT_END      511
-#define TV_CM_NEW_LINE      512
-#define TV_CM_BACK_SPACE    513
-#define TV_CM_DEL_CHAR      514
-#define TV_CM_DEL_WORD      515
-#define TV_CM_DEL_START     516
-#define TV_CM_DEL_END       517
-#define TV_CM_DEL_LINE      518
-#define TV_CM_INS_MODE      519
-#define TV_CM_START_SELECT  520
-#define TV_CM_HIDE_SELECT   521
-#define TV_CM_INDENT_MODE   522
-#define TV_CM_UPDATE_TITLE  523
-#define TV_CM_SELECT_ALL    524
-#define TV_CM_DEL_WORD_LEFT 525
-#define TV_CM_ENCODING      526
+//// Search result constants
+//
+// Constants for search operation results
 
-/* Editor dialog codes */
-#define TV_ED_OUT_OF_MEMORY    0
-#define TV_ED_READ_ERROR       1
-#define TV_ED_WRITE_ERROR      2
-#define TV_ED_CREATE_ERROR     3
-#define TV_ED_SAVE_MODIFY      4
-#define TV_ED_SAVE_UNTITLED    5
-#define TV_ED_SAVE_AS          6
-#define TV_ED_FIND             7
-#define TV_ED_SEARCH_FAILED    8
-#define TV_ED_REPLACE          9
-#define TV_ED_REPLACE_PROMPT   10
+extern const tv_uint tv_sfSearchFailed;
 
-/* Editor flags */
-#define TV_EF_CASE_SENSITIVE    0x0001
-#define TV_EF_WHOLE_WORDS_ONLY  0x0002
-#define TV_EF_PROMPT_ON_REPLACE 0x0004
-#define TV_EF_REPLACE_ALL       0x0008
-#define TV_EF_DO_REPLACE        0x0010
-#define TV_EF_BACKUP_FILES      0x0100
+//// Editor command codes
+//
+// Command codes for find/replace operations
 
-/* Constants */
-#define TV_MAX_LINE_LENGTH  256
-#define TV_MAX_PATH         260
+extern const int tv_cmFind;
+extern const int tv_cmReplace;
+extern const int tv_cmSearchAgain;
+
+//// Editor navigation and editing command codes
+//
+// Command codes for cursor movement and text editing operations
+
+extern const int tv_cmCharLeft;
+extern const int tv_cmCharRight;
+extern const int tv_cmWordLeft;
+extern const int tv_cmWordRight;
+extern const int tv_cmLineStart;
+extern const int tv_cmLineEnd;
+extern const int tv_cmLineUp;
+extern const int tv_cmLineDown;
+extern const int tv_cmPageUp;
+extern const int tv_cmPageDown;
+extern const int tv_cmTextStart;
+extern const int tv_cmTextEnd;
+extern const int tv_cmNewLine;
+extern const int tv_cmBackSpace;
+extern const int tv_cmDelChar;
+extern const int tv_cmDelWord;
+extern const int tv_cmDelStart;
+extern const int tv_cmDelEnd;
+extern const int tv_cmDelLine;
+extern const int tv_cmInsMode;
+extern const int tv_cmStartSelect;
+extern const int tv_cmHideSelect;
+extern const int tv_cmIndentMode;
+extern const int tv_cmUpdateTitle;
+extern const int tv_cmSelectAll;
+extern const int tv_cmDelWordLeft;
+extern const int tv_cmEncoding;
+
+//// Editor dialog constants
+//
+// Constants for editor dialog types
+
+extern const int tv_edOutOfMemory;
+extern const int tv_edReadError;
+extern const int tv_edWriteError;
+extern const int tv_edCreateError;
+extern const int tv_edSaveModify;
+extern const int tv_edSaveUntitled;
+extern const int tv_edSaveAs;
+extern const int tv_edFind;
+extern const int tv_edSearchFailed;
+extern const int tv_edReplace;
+extern const int tv_edReplacePrompt;
+
+//// Editor flag constants
+//
+// Flags for editor behavior and search/replace options
+
+extern const int tv_efCaseSensitive;
+extern const int tv_efWholeWordsOnly;
+extern const int tv_efPromptOnReplace;
+extern const int tv_efReplaceAll;
+extern const int tv_efDoReplace;
+extern const int tv_efBackupFiles;
+
+//// Editor limits
+//
+// Maximum line length constant
+
+extern const int tv_maxLineLength;
+
 
 /* Line ending types */
 typedef enum {
-    TV_EOL_CRLF = 0,
-    TV_EOL_LF = 1,
-    TV_EOL_CR = 2
+    eolCrLf, eolLf, eolCr
 } tv_LineEndingType;
 
 /* Encoding types */
 typedef enum {
-    TV_ENC_DEFAULT = 0,
-    TV_ENC_SINGLE_BYTE = 1
+    encDefault, encSingleByte
 } tv_Encoding;
 
 /* TMemoData structure */

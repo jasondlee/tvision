@@ -9,6 +9,86 @@
 #include <cstring>
 
 extern "C" {
+    
+//// Editor update flags
+
+const int tv_ufUpdate = ufUpdate;
+const int tv_ufLine = ufLine;
+const int tv_ufView = ufView;
+
+//// Selection mode flags
+
+const int tv_smExtend = smExtend;
+const int tv_smDouble = smDouble;
+const int tv_smTriple = smTriple;
+
+//// Search result constants
+
+const tv_uint tv_sfSearchFailed = sfSearchFailed;
+
+//// Editor command codes - find/replace operations
+
+const int tv_cmFind = cmFind;
+const int tv_cmReplace = cmReplace;
+const int tv_cmSearchAgain = cmSearchAgain;
+
+//// Editor navigation and editing command codes
+
+const int tv_cmCharLeft = cmCharLeft;
+const int tv_cmCharRight = cmCharRight;
+const int tv_cmWordLeft = cmWordLeft;
+const int tv_cmWordRight = cmWordRight;
+const int tv_cmLineStart = cmLineStart;
+const int tv_cmLineEnd = cmLineEnd;
+const int tv_cmLineUp = cmLineUp;
+const int tv_cmLineDown = cmLineDown;
+const int tv_cmPageUp = cmPageUp;
+const int tv_cmPageDown = cmPageDown;
+const int tv_cmTextStart = cmTextStart;
+const int tv_cmTextEnd = cmTextEnd;
+const int tv_cmNewLine = cmNewLine;
+const int tv_cmBackSpace = cmBackSpace;
+const int tv_cmDelChar = cmDelChar;
+const int tv_cmDelWord = cmDelWord;
+const int tv_cmDelStart = cmDelStart;
+const int tv_cmDelEnd = cmDelEnd;
+const int tv_cmDelLine = cmDelLine;
+const int tv_cmInsMode = cmInsMode;
+const int tv_cmStartSelect = cmStartSelect;
+const int tv_cmHideSelect = cmHideSelect;
+const int tv_cmIndentMode = cmIndentMode;
+const int tv_cmUpdateTitle = cmUpdateTitle;
+const int tv_cmSelectAll = cmSelectAll;
+const int tv_cmDelWordLeft = cmDelWordLeft;
+const int tv_cmEncoding = cmEncoding;
+
+//// Editor dialog constants
+
+const int tv_edOutOfMemory = edOutOfMemory;
+const int tv_edReadError = edReadError;
+const int tv_edWriteError = edWriteError;
+const int tv_edCreateError = edCreateError;
+const int tv_edSaveModify = edSaveModify;
+const int tv_edSaveUntitled = edSaveUntitled;
+const int tv_edSaveAs = edSaveAs;
+const int tv_edFind = edFind;
+const int tv_edSearchFailed = edSearchFailed;
+const int tv_edReplace = edReplace;
+const int tv_edReplacePrompt = edReplacePrompt;
+
+//// Editor flag constants
+
+const int tv_efCaseSensitive = efCaseSensitive;
+const int tv_efWholeWordsOnly = efWholeWordsOnly;
+const int tv_efPromptOnReplace = efPromptOnReplace;
+const int tv_efReplaceAll = efReplaceAll;
+const int tv_efDoReplace = efDoReplace;
+const int tv_efBackupFiles = efBackupFiles;
+
+//// Editor limits
+
+const int tv_maxLineLength = maxLineLength;
+
 
 /* TIndicator functions */
 
@@ -261,7 +341,7 @@ tv_LineEndingType tv_editor_get_line_ending_type(tv_Editor* editor) {
     if (editor) {
         return static_cast<tv_LineEndingType>(reinterpret_cast<TEditor*>(editor)->lineEndingType);
     }
-    return TV_EOL_CRLF;
+    return eolCrLf;
 }
 
 void tv_editor_set_line_ending_type(tv_Editor* editor, tv_LineEndingType type) {
@@ -274,7 +354,7 @@ tv_Encoding tv_editor_get_encoding(tv_Editor* editor) {
     if (editor) {
         return static_cast<tv_Encoding>(reinterpret_cast<TEditor*>(editor)->encoding);
     }
-    return TV_ENC_DEFAULT;
+    return encDefault;
 }
 
 void tv_editor_set_encoding(tv_Editor* editor, tv_Encoding encoding) {
