@@ -184,7 +184,7 @@ int tv_outlineviewer_get_foc(tv_OutlineViewer* viewer) {
 /* TOutline functions */
 
 tv_Outline* tv_outline_create(tv_Rect bounds, tv_ScrollBar* h_scrollbar, tv_ScrollBar* v_scrollbar, tv_Node* root) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Outline*>(
         new TOutline(rect,
                      reinterpret_cast<TScrollBar*>(h_scrollbar),

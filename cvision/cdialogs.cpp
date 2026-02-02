@@ -12,7 +12,7 @@ extern "C" {
 /* TDialog functions */
 
 tv_Dialog* tv_dialog_create(tv_Rect bounds, const char* title) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Dialog*>(new TDialog(rect, title));
 }
 
@@ -25,7 +25,7 @@ void tv_dialog_destroy(tv_Dialog* dialog) {
 /* TInputLine functions */
 
 tv_InputLine* tv_inputline_create(tv_Rect bounds, int limit, tv_Validator* validator, tv_ushort limit_mode) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_InputLine*>(
         new TInputLine(rect, limit, reinterpret_cast<TValidator*>(validator), limit_mode)
     );
@@ -71,7 +71,7 @@ void tv_inputline_set_validator(tv_InputLine* inputline, tv_Validator* validator
 /* TButton functions */
 
 tv_Button* tv_button_create(tv_Rect bounds, const char* title, tv_ushort command, tv_ushort flags) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Button*>(new TButton(rect, title, command, flags));
 }
 
@@ -110,7 +110,7 @@ void tv_sitem_destroy(tv_SItem* item) {
 /* TCluster functions */
 
 tv_Cluster* tv_cluster_create(tv_Rect bounds, tv_SItem* strings) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Cluster*>(
         new TCluster(rect, reinterpret_cast<TSItem*>(strings))
     );
@@ -163,7 +163,7 @@ void tv_cluster_set_button_state(tv_Cluster* cluster, tv_uint mask, tv_bool enab
 /* TRadioButtons functions */
 
 tv_RadioButtons* tv_radiobuttons_create(tv_Rect bounds, tv_SItem* strings) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_RadioButtons*>(
         new TRadioButtons(rect, reinterpret_cast<TSItem*>(strings))
     );
@@ -190,7 +190,7 @@ void tv_radiobuttons_set_data(tv_RadioButtons* radiobuttons, void* rec) {
 /* TCheckBoxes functions */
 
 tv_CheckBoxes* tv_checkboxes_create(tv_Rect bounds, tv_SItem* strings) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_CheckBoxes*>(
         new TCheckBoxes(rect, reinterpret_cast<TSItem*>(strings))
     );
@@ -219,7 +219,7 @@ void tv_checkboxes_set_data(tv_CheckBoxes* checkboxes, void* rec) {
 tv_MultiCheckBoxes* tv_multicheckboxes_create(tv_Rect bounds, tv_SItem* strings, 
                                                tv_uchar sel_range, tv_ushort flags, 
                                                const char* states) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_MultiCheckBoxes*>(
         new TMultiCheckBoxes(rect, reinterpret_cast<TSItem*>(strings), sel_range, flags, states)
     );
@@ -246,7 +246,7 @@ void tv_multicheckboxes_set_data(tv_MultiCheckBoxes* multicheckboxes, void* rec)
 /* TListBox functions */
 
 tv_ListBox* tv_listbox_create(tv_Rect bounds, tv_ushort num_cols, tv_ScrollBar* scrollbar) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_ListBox*>(
         new TListBox(rect, num_cols, reinterpret_cast<TScrollBar*>(scrollbar))
     );
@@ -286,7 +286,7 @@ tv_Collection* tv_listbox_get_list(tv_ListBox* listbox) {
 /* TStaticText functions */
 
 tv_StaticText* tv_statictext_create(tv_Rect bounds, const char* text) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_StaticText*>(new TStaticText(rect, text));
 }
 
@@ -305,7 +305,7 @@ void tv_statictext_get_text(tv_StaticText* statictext, char* dest) {
 /* TParamText functions */
 
 tv_ParamText* tv_paramtext_create(tv_Rect bounds) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_ParamText*>(new TParamText(rect));
 }
 
@@ -353,7 +353,7 @@ int tv_paramtext_get_text_len(tv_ParamText* paramtext) {
 /* TLabel functions */
 
 tv_Label* tv_label_create(tv_Rect bounds, const char* text, tv_View* link) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Label*>(
         new TLabel(rect, text, reinterpret_cast<TView*>(link))
     );
@@ -368,7 +368,7 @@ void tv_label_destroy(tv_Label* label) {
 /* THistory functions */
 
 tv_History* tv_history_create(tv_Rect bounds, tv_InputLine* link, tv_ushort history_id) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_History*>(
         new THistory(rect, reinterpret_cast<TInputLine*>(link), history_id)
     );
@@ -390,7 +390,7 @@ void tv_history_record(tv_History* history, const char* s) {
 
 tv_HistoryViewer* tv_historyviewer_create(tv_Rect bounds, tv_ScrollBar* hscrollbar,
                                           tv_ScrollBar* vscrollbar, tv_ushort history_id) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_HistoryViewer*>(
         new THistoryViewer(rect, reinterpret_cast<TScrollBar*>(hscrollbar),
                           reinterpret_cast<TScrollBar*>(vscrollbar), history_id)
@@ -413,7 +413,7 @@ int tv_historyviewer_history_width(tv_HistoryViewer* viewer) {
 /* THistoryWindow functions */
 
 tv_HistoryWindow* tv_historywindow_create(tv_Rect bounds, tv_ushort history_id) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_HistoryWindow*>(new THistoryWindow(rect, history_id));
 }
 

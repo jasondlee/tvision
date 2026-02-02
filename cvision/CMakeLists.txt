@@ -7,9 +7,9 @@ cmake_minimum_required(VERSION 3.5)
 add_library(cvision STATIC
         cvision.cpp
         cvision.h
-        ckeys.h
-        ccommands.h
         cmenu.cpp
+        csystem.cpp
+        csystem.h
         cstatusbar.cpp
         cdialogs.cpp
         cdialogs.h

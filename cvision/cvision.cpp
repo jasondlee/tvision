@@ -74,10 +74,10 @@ extern "C" {
 
     tv_Rect tv_rect_make(int ax, int ay, int bx, int by) {
         tv_Rect r;
-        r.ax = ax;
-        r.ay = ay;
-        r.bx = bx;
-        r.by = by;
+        r.a.x = ax;
+        r.a.y = ay;
+        r.b.x = bx;
+        r.b.y = by;
         return r;
     }
 

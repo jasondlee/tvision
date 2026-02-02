@@ -122,8 +122,19 @@
 
 typedef unsigned short ushort;
 
-#include "ckeys.h"
-#include "ccommands.h"
+#include "cconsts.h"
+
+/* TPoint structure - defined here to avoid circular dependency */
+typedef struct tv_Point {
+    int x;
+    int y;
+} tv_Point;
+
+/* TRect structure - defined here to avoid circular dependency */
+typedef struct tv_Rect {
+    tv_Point a;
+    tv_Point b;
+} tv_Rect;
 
 /* Maximum text size for key events */
 #define TV_MAX_CHAR_SIZE    4
@@ -169,18 +180,6 @@ typedef unsigned short tv_ushort;
 typedef unsigned char tv_uchar;
 typedef unsigned int tv_uint;
 typedef int tv_bool;
-
-/* TPoint wrapper - simple struct, direct mapping */
-typedef struct tv_Point {
-    int x;
-    int y;
-} tv_Point;
-
-/* TRect wrapper - simple struct, direct mapping */
-typedef struct tv_Rect {
-    int ax, ay; /* Top-left corner */
-    int bx, by; /* Bottom-right corner */
-} tv_Rect;
 
 /* Mouse event structure */
 typedef struct tv_MouseEvent {

@@ -12,7 +12,7 @@ extern "C" {
 /* TFileInputLine functions */
 
 tv_FileInputLine* tv_fileinputline_create(tv_Rect bounds, short max_len) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_FileInputLine*>(new TFileInputLine(rect, max_len));
 }
 
@@ -101,7 +101,7 @@ void tv_filecollection_free_item(tv_FileCollection* collection, tv_SearchRec* it
 /* TSortedListBox functions */
 
 tv_SortedListBox* tv_sortedlistbox_create(tv_Rect bounds, tv_ushort num_cols, tv_ScrollBar* scrollbar) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_SortedListBox*>(
         new TSortedListBox(rect, num_cols, reinterpret_cast<TScrollBar*>(scrollbar))
     );
@@ -164,7 +164,7 @@ tv_Collection* tv_sortedlistbox_get_list(tv_SortedListBox* listbox) {
 /* TFileList functions */
 
 tv_FileList* tv_filelist_create(tv_Rect bounds, tv_ScrollBar* scrollbar) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_FileList*>(
         new TFileList(rect, reinterpret_cast<TScrollBar*>(scrollbar))
     );
@@ -245,7 +245,7 @@ tv_FileCollection* tv_filelist_get_list(tv_FileList* filelist) {
 /* TFileInfoPane functions */
 
 tv_FileInfoPane* tv_fileinfopane_create(tv_Rect bounds) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_FileInfoPane*>(new TFileInfoPane(rect));
 }
 
@@ -446,7 +446,7 @@ void tv_dircollection_free_item(tv_DirCollection* collection, tv_DirEntry* item)
 /* TDirListBox functions */
 
 tv_DirListBox* tv_dirlistbox_create(tv_Rect bounds, tv_ScrollBar* scrollbar) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_DirListBox*>(
         new TDirListBox(rect, reinterpret_cast<TScrollBar*>(scrollbar))
     );

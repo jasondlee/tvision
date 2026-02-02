@@ -43,7 +43,7 @@ extern "C" {
     /* TMenuBar functions */
 
     tv_MenuBar *tv_menubar_create(tv_Rect bounds, tv_SubMenu *menu) {
-        TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+        TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
         TMenu *tmenu = new TMenu(*reinterpret_cast<TSubMenu *>(menu));
         return reinterpret_cast<tv_MenuBar *>(new TMenuBar(rect, tmenu));
     }

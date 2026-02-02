@@ -25,7 +25,7 @@ extern "C" {
     /* TStatusLine functions */
 
     tv_StatusLine* tv_statusline_create(tv_Rect bounds, tv_StatusItem* items) {
-        TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+        TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
         TStatusDef* def = new TStatusDef(0, 0xFFFF, reinterpret_cast<TStatusItem*>(items));
         return reinterpret_cast<tv_StatusLine*>(new TStatusLine(rect, *def));
     }

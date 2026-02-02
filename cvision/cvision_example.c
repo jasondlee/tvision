@@ -20,7 +20,7 @@ tv_StatusLine* createStatusLine(const tv_Rect r) {
         tv_statusitem_create("~F4~ Editor", kbF4, cmEditorDemo,
     tv_statusitem_create("~Alt+X~ Exit", 0, cmQuit, NULL))));
 
-    return tv_statusline_create(tv_rect_make(r.ax, r.by-1, r.bx, r.by ), items);
+    return tv_statusline_create(tv_rect_make(r.a.x, r.b.y-1, r.b.x, r.b.y ), items);
 }
 
 tv_MenuBar* createMenuBar(tv_Rect r) {
@@ -37,8 +37,8 @@ tv_MenuBar* createMenuBar(tv_Rect r) {
 
 
     tv_submenu_add_next(about_menu, file_menu);
-    /* Create menu bar */
-    return tv_menubar_create(tv_rect_make(r.ax, r.ay, r.bx, r.ay + 1 ), about_menu);
+    /* Create menubar */
+    return tv_menubar_create(tv_rect_make(r.a.x, r.a.y, r.b.x, r.a.y + 1 ), about_menu);
 }
 
 

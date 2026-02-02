@@ -12,7 +12,7 @@ extern "C" {
 /* TIndicator functions */
 
 tv_Indicator* tv_indicator_create(tv_Rect bounds) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Indicator*>(new TIndicator(rect));
 }
 
@@ -34,7 +34,7 @@ void tv_indicator_set_value(tv_Indicator* indicator, tv_Point location, tv_bool 
 tv_Editor* tv_editor_create(tv_Rect bounds, tv_ScrollBar* hscrollbar, 
                             tv_ScrollBar* vscrollbar, tv_Indicator* indicator, 
                             tv_uint buf_size) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Editor*>(
         new TEditor(rect, 
                    reinterpret_cast<TScrollBar*>(hscrollbar),
@@ -287,7 +287,7 @@ void tv_editor_set_encoding(tv_Editor* editor, tv_Encoding encoding) {
 tv_Memo* tv_memo_create(tv_Rect bounds, tv_ScrollBar* hscrollbar,
                         tv_ScrollBar* vscrollbar, tv_Indicator* indicator,
                         tv_ushort buf_size) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_Memo*>(
         new TMemo(rect,
                  reinterpret_cast<TScrollBar*>(hscrollbar),
@@ -327,7 +327,7 @@ tv_ushort tv_memo_data_size(tv_Memo* memo) {
 tv_FileEditor* tv_fileeditor_create(tv_Rect bounds, tv_ScrollBar* hscrollbar,
                                     tv_ScrollBar* vscrollbar, tv_Indicator* indicator,
                                     const char* filename) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_FileEditor*>(
         new TFileEditor(rect,
                        reinterpret_cast<TScrollBar*>(hscrollbar),
@@ -388,7 +388,7 @@ void tv_fileeditor_set_filename(tv_FileEditor* fileeditor, const char* filename)
 /* TEditWindow functions */
 
 tv_EditWindow* tv_editwindow_create(tv_Rect bounds, const char* filename, int number) {
-    TRect rect(bounds.ax, bounds.ay, bounds.bx, bounds.by);
+    TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
     return reinterpret_cast<tv_EditWindow*>(
         new TEditWindow(rect, filename ? filename : "", number)
     );

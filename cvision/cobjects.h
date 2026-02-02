@@ -12,11 +12,7 @@ extern "C" {
 #endif
 
 /* TPoint C wrapper types and functions */
-
-typedef struct tv_Point {
-    int x;
-    int y;
-} tv_Point;
+/* Note: tv_Point is defined in ctypes.h */
 
 /* TPoint creation and manipulation */
 tv_Point tv_point_create(int x, int y);
@@ -28,11 +24,7 @@ int tv_point_equals(tv_Point one, tv_Point two);
 int tv_point_not_equals(tv_Point one, tv_Point two);
 
 /* TRect C wrapper types and functions */
-
-typedef struct tv_Rect {
-    tv_Point a;
-    tv_Point b;
-} tv_Rect;
+/* Note: tv_Rect is defined in ctypes.h */
 
 /* TRect creation and manipulation */
 tv_Rect tv_rect_create(int ax, int ay, int bx, int by);
