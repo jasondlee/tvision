@@ -68,20 +68,4 @@ extern "C" {
     void tv_application_run(tv_Application* app) {
         reinterpret_cast<TApplication*>(app)->run();
     }
-
-
-    /* TRect functions */
-
-    tv_Rect tv_rect_make(int ax, int ay, int bx, int by) {
-        tv_Rect r;
-        r.a.x = ax;
-        r.a.y = ay;
-        r.b.x = bx;
-        r.b.y = by;
-        return r;
-    }
-
-    ushort tv_message_box(const char* msg, ushort flags) {
-        return messageBox (msg, flags );
-    }
 }

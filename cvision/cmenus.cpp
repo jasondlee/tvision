@@ -30,18 +30,7 @@ extern "C" {
         return submenu;
     }
 
-    /*
-    tv_MenuItem* tv_menuitem_create_submenu(const char* name, tv_MenuItem* submenu, tv_MenuItem* next) {
-        auto* menu = new TMenu(*reinterpret_cast<TMenuItem*>(submenu));
-        return reinterpret_cast<tv_MenuItem*>(
-            new TSubMenu(name, menu, reinterpret_cast<TMenuItem*>(next))
-            //TSubMenu( TStringView nm, TKey key, ushort helpCtx = hcNoContext ) noexcept;
-        );
-    }
-    */
-
     /* TMenuBar functions */
-
     tv_MenuBar *tv_menubar_create(tv_Rect bounds, tv_SubMenu *menu) {
         TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
         TMenu *tmenu = new TMenu(*reinterpret_cast<TSubMenu *>(menu));
@@ -51,6 +40,35 @@ extern "C" {
     void tv_menubar_destroy(tv_MenuBar *menubar) {
         if (menubar) {
             TObject::destroy(reinterpret_cast<TMenuBar *>(menubar));
+        }
+    }
+
+    /* Status item helper functions */
+
+    tv_StatusItem* tv_statusitem_create(const char* text, tv_ushort key_code, tv_ushort command,
+                                         tv_StatusItem* next) {
+        return reinterpret_cast<tv_StatusItem*>(
+            new TStatusItem(text, key_code, command, reinterpret_cast<TStatusItem*>(next))
+        );
+    }
+
+    void tv_statusitem_destroy(tv_StatusItem* item) {
+        if (item) {
+            delete reinterpret_cast<TStatusItem*>(item);
+        }
+    }
+
+    /* TStatusLine functions */
+
+    tv_StatusLine* tv_statusline_create(tv_Rect bounds, tv_StatusItem* items) {
+        TRect rect(bounds.a.x, bounds.a.y, bounds.b.x, bounds.b.y);
+        TStatusDef* def = new TStatusDef(0, 0xFFFF, reinterpret_cast<TStatusItem*>(items));
+        return reinterpret_cast<tv_StatusLine*>(new TStatusLine(rect, *def));
+    }
+
+    void tv_statusline_destroy(tv_StatusLine* statusline) {
+        if (statusline) {
+            TObject::destroy(reinterpret_cast<TStatusLine*>(statusline));
         }
     }
 }

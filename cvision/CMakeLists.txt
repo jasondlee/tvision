@@ -5,20 +5,26 @@ cmake_minimum_required(VERSION 3.5)
 
 # Create the cvision library
 add_library(cvision STATIC
-        cvision.cpp
-        cvision.h
-        cmenu.cpp
-        csystem.cpp
-        csystem.h
-        cstatusbar.cpp
+        cconsts.h
         cdialogs.cpp
         cdialogs.h
         ceditors.cpp
         ceditors.h
-        cstddlg.cpp
-        cstddlg.h
+        cmenus.cpp
+        cmenus.h
+        cmsgbox.cpp
+        cmsgbox.h
+        cobjects.cpp
+        cobjects.h
         coutline.cpp
         coutline.h
+        cstddlg.cpp
+        cstddlg.h
+        csystem.cpp
+        csystem.h
+        ctypes.h
+        cvision.cpp
+        cvision.h
 )
 
 # Link against tvision and the other C wrapper libraries
