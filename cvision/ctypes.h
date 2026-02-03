@@ -174,6 +174,8 @@ typedef unsigned int tv_TimerId;
 typedef unsigned short tv_ushort;
 typedef unsigned char tv_uchar;
 typedef unsigned int tv_uint;
+typedef short tv_short;
+typedef int tv_int;
 typedef int tv_bool;
 
 /* TPoint structure - defined here to avoid circular dependency */

@@ -35,6 +35,13 @@ struct tv_SearchRec {
     char name[256];
 };
 
+extern const int tv_fdOKButton;
+extern const int tv_fdOpenButton;
+extern const int tv_fdReplaceButton;
+extern const int tv_fdClearButton;
+extern const int tv_fdHelpButton;
+extern const int tv_fdNoLoadDir;
+
 /* TFileInputLine functions */
 tv_FileInputLine* tv_fileinputline_create(tv_Rect bounds, short max_len);
 void tv_fileinputline_destroy(tv_FileInputLine* input);

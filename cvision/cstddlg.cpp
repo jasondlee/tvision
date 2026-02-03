@@ -10,6 +10,13 @@
 #include <tvision/tv.h>
 
 extern "C" {
+    
+const int tv_fdOKButton = fdOKButton;
+const int tv_fdOpenButton = fdOpenButton;
+const int tv_fdReplaceButton = fdReplaceButton;
+const int tv_fdClearButton = fdClearButton;
+const int tv_fdHelpButton = fdHelpButton;
+const int tv_fdNoLoadDir = fdNoLoadDir;
 
 /* TFileInputLine functions */
 
