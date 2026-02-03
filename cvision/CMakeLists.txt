@@ -27,6 +27,7 @@ add_library(cvision STATIC
         ctypes.h
         cvision.cpp
         cvision.h
+        cvision_example.h
 )
 
 # Link against tvision and the other C wrapper libraries

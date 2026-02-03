@@ -148,7 +148,7 @@ void tv_eventqueue_wake_up(void) {
     TEventQueue::wakeUp();
 }
 
-void tv_eventqueue_set_paste_text(const char *text, size_t length) {
+void tv_eventqueue_set_paste_text(const char *text, int length) {
     if (text) {
         TEventQueue::setPasteText(TStringView(text, length));
     }
@@ -204,7 +204,7 @@ void tv_eventqueue_set_mouse_reverse(tv_bool reverse) {
 // }
 
 /* TClipboard functions */
-void tv_clipboard_set_text(const char *text, size_t length) {
+void tv_clipboard_set_text(const char *text, int length) {
     if (text) {
         TClipboard::setText(TStringView(text, length));
     }

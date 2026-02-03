@@ -2,23 +2,20 @@
 // Created by Jason Lee on 1/28/26.
 //
 
+#include "cvision_example.h"
 #include "ctypes.h"
 #include "cvision.h"
 #include "cobjects.h"
 #include "cmenus.h"
 #include "ceditors.h"
 #include "ctkeys.h"
+#include "cviews.h"
 #include "cmsgbox.h"
+#include "cstddlg.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-/* Command constants */
-const ushort
-        cmNewWindow = 100,
-        cmListDemo = 101,
-        cmEditorDemo = 102,
-        cmAbout = 103;
-const int
-        cmChangeDrct = 102;
 tv_StatusLine *createStatusLine(const tv_Rect r) {
     tv_StatusItem *items =
             tv_statusitem_create("~F2~ New", tv_kbF2, cmNewWindow,
@@ -88,26 +85,59 @@ tv_MenuBar *createMenuBar(tv_Rect r) {
     return tv_menubar_create(tv_rect_create(r.a.x, r.a.y, r.b.x, r.a.y + 1), sub1);
 }
 
-
-tv_Application *app;
-
-void handleEvent(tv_Event e) {
-    if (e.what == cmQuit) {
+void handleEvent(tv_Event event) {
+    if (event.what == cmQuit) {
         tv_application_destroy(app);
     }
 
-    switch (e.data.message.command) {
-        case cmNewWindow:
-        case cmListDemo:
-        case cmEditorDemo:
-            break;
-        case cmAbout:
-            tv_messagebox("This is a demo application of the C wrapper for magiblot's Turbo Vision library.",
-                          0x0001 | 0x0400);
-            break;
+    if( event.what != evCommand )
+        return;
+    else
+        switch( event.data.message.command ) {
+        case cmOpen:
+                fileOpen();
+                break;
+        case cmNew:
+                fileNew();
+                break;
+        case cmChangeDrct:
+                // changeDir();
+                break;
         default:
-            return;
+                return ;
+        }
+
+    event.what = evNothing;
+
+    // switch (event.data.message.command) {
+    //     case cmNewWindow:
+    //     case cmListDemo:
+    //     case cmEditorDemo:
+    //         break;
+    //     case cmAbout:
+    //         tv_messagebox("This is a demo application of the C wrapper for magiblot's Turbo Vision library.",
+    //                       0x0001 | 0x0400);
+    //         break;
+    //     default:
+    //         return;
+    // }
+}
+
+void fileOpen() {
+    char fileName[260];
+    strcpy( fileName, "*.*" );
+
+    tv_FileDialog* fd = tv_filedialog_create( "*.*", "Open file", "~N~ame",
+        tv_fdOpenButton, 100 );
+
+    if( tv_application_exec_dialog( app, fd, fileName ) != cmCancel ) {
+        tv_application_open_editor( app, fileName, 1 );
     }
+}
+
+void fileNew()
+{
+    tv_application_open_editor( app, 0, 1 );
 }
 
 int main(void) {

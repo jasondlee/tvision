@@ -4,6 +4,7 @@
 
 #include "ctypes.h"
 #include "cvision.h"
+#include "cstddlg.h"
 #include "csystem.h"
 #include <tvision/tv.h>
 
@@ -29,6 +30,33 @@ void TCApplication::handleEvent(TEvent& event) {
             cHandleEvent(event);
         }
     }
+}
+
+ushort TCApplication::execDialog( TDialog *d, void *data ) {
+    TView *p = validView( d );
+    if( p == nullptr ) {
+        return cmCancel;
+    } else {
+        if( data != nullptr) {
+            p->setData( data );
+        }
+        ushort result = execView( p );
+        if( result != cmCancel && data != nullptr ) {
+            p->getData( data );
+        }
+        destroy( p );
+        return result;
+    }
+}
+
+TEditWindow *TCApplication::openEditor( const char *fileName, Boolean visible )
+{
+    TRect r = deskTop->getExtent();
+    TView *p = validView( new TEditWindow( r, fileName, wnNoNumber ) );
+    if( !visible )
+        p->hide();
+    deskTop->insert( p );
+    return (TEditWindow *)p;
 }
 
 extern "C" {
@@ -71,5 +99,15 @@ extern "C" {
 
     void tv_application_run(tv_Application* app) {
         reinterpret_cast<TApplication*>(app)->run();
+    }
+
+    ushort tv_application_exec_dialog(tv_Application *app, tv_FileDialog *d, void *data) {
+        return reinterpret_cast<TCApplication*>(app)->execDialog(reinterpret_cast<TDialog*>(d), data);
+    }
+
+    tv_EditWindow *tv_application_open_editor(tv_Application *app, const char *fileName, tv_bool visible) {
+        return reinterpret_cast<tv_EditWindow*>(
+            reinterpret_cast<TCApplication*>(app)->openEditor(fileName, visible)
+        );
     }
 }

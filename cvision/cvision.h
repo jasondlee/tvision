@@ -4,12 +4,14 @@
 
 #ifndef TVISION_CVISION_H
 #define TVISION_CVISION_H
+#include "ceditors.h"
 
-
-#ifdef __cplusplus
+#include "cstddlg.h"
 #include "ctypes.h"
 #include "csystem.h"
 #include "cobjects.h"
+
+#ifdef __cplusplus
 #include <tvision/tv.h>
 
 class TCApplication : public TApplication {
@@ -19,11 +21,10 @@ public:
                   TMenuBar * (*menuBarFunc)(TRect),
                   void (*handleEventFunc)(TEvent));
 
-    virtual void handleEvent(TEvent &event);
-
+    void handleEvent(TEvent &event) override;
+    virtual ushort execDialog( TDialog *d, void *data );
+    TEditWindow *openEditor( const char *fileName, Boolean visible );
 private:
-    // TStatusLine *(*cStatusLine)(TRect);
-    // TMenuBar *(*cMenuBar)(TRect);
     void (*cHandleEvent)(TEvent);
 };
 
@@ -41,8 +42,9 @@ tv_Application *tv_application_create(tv_StatusLine *(*cStatusLine)(tv_Rect),
                                       void (*handleEventFunc)(tv_Event));
 
 void tv_application_destroy(tv_Application *app);
-
 void tv_application_run(tv_Application *app);
+ushort tv_application_exec_dialog(tv_Application *app, tv_FileDialog *d, void *data);
+tv_EditWindow *tv_application_open_editor(tv_Application *app, const char *fileName, tv_bool visible);
 
 #endif //TVISION_CVISION_H
 

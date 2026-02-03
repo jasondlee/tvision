@@ -7,7 +7,6 @@
 
 #include "ctypes.h"
 #include "cobjects.h"
-#include <cstddef>
 
 #ifdef __cplusplus
 extern "C" {
@@ -71,7 +70,7 @@ void tv_eventqueue_suspend(void);
 void tv_eventqueue_resume(void);
 void tv_eventqueue_wait_for_events(int timeoutMs);
 void tv_eventqueue_wake_up(void);
-void tv_eventqueue_set_paste_text(const char *text, size_t length);
+void tv_eventqueue_set_paste_text(const char *text, int length);
 
 /* TEventQueue static variables accessors */
 tv_ushort tv_eventqueue_get_double_delay(void);
@@ -87,7 +86,7 @@ void tv_eventqueue_set_mouse_reverse(tv_bool reverse);
 // int tv_timerqueue_time_until_next_timeout(tv_TTimerQueue *queue);
 
 /* TClipboard functions */
-void tv_clipboard_set_text(const char *text, size_t length);
+void tv_clipboard_set_text(const char *text, int length);
 void tv_clipboard_request_text(void);
 
 /* TDisplay video modes */
